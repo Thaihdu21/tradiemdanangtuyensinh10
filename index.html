@@ -111,7 +111,6 @@
   .score-box.chuyen { background: linear-gradient(135deg,#fa709a22,#fa709a44); border: 2px solid #fa709a; }
   .score-box.kk     { background: linear-gradient(135deg,#ffecd222,#fcb69f44); border: 2px solid #fcb69f; }
   .score-box.ut     { background: linear-gradient(135deg,#a8edea22,#fed6e344); border: 2px solid #a8edea; }
-  .score-box.qd     { background: linear-gradient(135deg,#d4fc7922,#96e6a144); border: 2px solid #96e6a1; }
   .score-box .mon   { font-size: 11px; font-weight: 700; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
   .score-box .diem  { font-size: 30px; font-weight: 800; color: #333; line-height: 1; }
   .score-box.van    .diem { color: #c026d3; }
@@ -120,8 +119,26 @@
   .score-box.chuyen .diem { color: #db2777; }
   .score-box.kk     .diem { color: #ea580c; }
   .score-box.ut     .diem { color: #0891b2; }
-  .score-box.qd     .diem { color: #15803d; font-size: 26px; }
   .score-box .label { font-size: 11px; color: #999; margin-top: 4px; }
+
+  /* KQHT-RL rectangle */
+  .qd-box {
+    background: linear-gradient(135deg, #d4fc7922, #96e6a144);
+    border: 2px solid #96e6a1;
+    border-radius: 16px;
+    padding: 16px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .qd-box .qd-left .qd-label {
+    font-size: 11px; font-weight: 700; color: #666;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+  }
+  .qd-box .qd-left .qd-sub { font-size: 12px; color: #888; }
+  .qd-box .qd-score { font-size: 36px; font-weight: 800; color: #15803d; flex-shrink: 0; }
 
   .tong-section { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
   .total-box { border-radius: 16px; padding: 18px 20px; text-align: center; color: white; }
@@ -135,11 +152,13 @@
   .rank-box {
     background: linear-gradient(135deg, #ffecd2, #fcb69f);
     border-radius: 16px; padding: 16px 20px; margin-bottom: 20px;
-    display: flex; align-items: center; gap: 14px;
+    display: flex; flex-direction: column; gap: 10px;
   }
-  .rank-box .rank-icon { font-size: 36px; flex-shrink: 0; }
-  .rank-box .rank-text { font-size: 15px; font-weight: 700; color: #92400e; }
-  .rank-box .rank-sub  { font-size: 13px; color: #b45309; margin-top: 2px; }
+  .rank-row { display: flex; align-items: center; gap: 14px; }
+  .rank-row .rank-icon { font-size: 32px; flex-shrink: 0; width: 40px; text-align: center; }
+  .rank-row .rank-text { font-size: 15px; font-weight: 700; color: #92400e; }
+  .rank-row .rank-sub  { font-size: 13px; color: #b45309; margin-top: 2px; }
+  .rank-divider { border: none; border-top: 1px dashed #f59e0b; margin: 2px 0; }
 
   .ai-box {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
@@ -197,6 +216,10 @@
     .chuyen-table th, .chuyen-table td { padding: 7px 4px; }
     .thu-khoa-header { gap: 8px; }
     .tk-mode-select { font-size: 12px; padding: 5px 10px; }
+    .qd-box { flex-direction: column; text-align: center; gap: 8px; }
+    .qd-box .qd-score { font-size: 28px; }
+    .rank-row .rank-text { font-size: 13px; }
+    .rank-row .rank-sub  { font-size: 12px; }
   }
 
   @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
@@ -280,21 +303,20 @@ async function loadData() {
 }
 loadData();
 
-// ========== THỦ KHOA - có select mode ==========
+// ========== THỦ KHOA ==========
 function renderThuKhoa() {
   if (!diemThiData) return;
 
-  const mode   = document.getElementById("tkModeSelect").value;
-  const medals = ["🥇","🥈","🥉"];
+  const mode    = document.getElementById("tkModeSelect").value;
+  const medals  = ["🥇","🥈","🥉"];
   const classes = ["rank1","rank2","rank3"];
   const labels  = ["Thủ khoa","Á khoa","Hạng Ba"];
 
-  // Chọn field tổng theo mode
-  const tongField = mode === "chuyen" ? "tong_chuyen"
+  const tongField = mode === "chuyen"  ? "tong_chuyen"
                   : mode === "ptdtnt" ? "tong_ptdtnt"
                   : "tong_dai_tra";
 
-  const modeLabel = mode === "chuyen" ? "tổng chuyên"
+  const modeLabel = mode === "chuyen"  ? "tổng chuyên"
                   : mode === "ptdtnt" ? "tổng PTDTNT"
                   : "đại trà";
 
@@ -354,7 +376,29 @@ function tinhRank(tongDaiTra) {
   return { rank, total: all.length };
 }
 
-// ========== GỢI Ý TRƯỜNG - SỬA LOGIC ==========
+function tinhRankChuyen(tongChuyen) {
+  if (!diemThiData || tongChuyen == null) return null;
+  const all = Object.values(diemThiData)
+    .filter(d => d.tong_chuyen != null)
+    .map(d => d.tong_chuyen)
+    .sort((a,b) => b-a);
+  if (all.length === 0) return null;
+  const rank = all.findIndex(d => d <= tongChuyen) + 1;
+  return { rank, total: all.length };
+}
+
+function tinhRankPTDTNT(tongPt) {
+  if (!diemThiData || tongPt == null) return null;
+  const all = Object.values(diemThiData)
+    .filter(d => d.tong_ptdtnt != null)
+    .map(d => d.tong_ptdtnt)
+    .sort((a,b) => b-a);
+  if (all.length === 0) return null;
+  const rank = all.findIndex(d => d <= tongPt) + 1;
+  return { rank, total: all.length };
+}
+
+// ========== GỢI Ý TRƯỜNG ==========
 function goiYTruong(tongDaiTra) {
   if (!diemChuanData?.phu_luc_4_cong_lap) return { dau:[], sat:[], kho:[] };
   const dau=[], sat=[], kho=[];
@@ -362,27 +406,16 @@ function goiYTruong(tongDaiTra) {
   diemChuanData.phu_luc_4_cong_lap.forEach(t => {
     const dc = t.diem_chuan;
     if (!dc) return;
-    const diff = Math.round((tongDaiTra - dc) * 100) / 100; // tránh lỗi float
+    const diff = Math.round((tongDaiTra - dc) * 100) / 100;
+    const obj  = { ten: t.ten_truong, dc, diff };
 
-    const obj = { ten: t.ten_truong, dc, diff };
-
-    if (diff >= 0) {
-      // Bằng hoặc cao hơn điểm chuẩn → có thể đậu
-      dau.push(obj);
-    } else if (diff > -1) {
-      // Thấp hơn dưới 1 điểm → sát sao
-      sat.push(obj);
-    } else {
-      // Thấp hơn 1 điểm trở lên → khó đậu
-      kho.push(obj);
-    }
+    if (diff >= 0)      dau.push(obj);
+    else if (diff > -1) sat.push(obj);
+    else                kho.push(obj);
   });
 
-  // Sắp xếp: đậu → cao nhất lên đầu (trường khó nhất còn đậu được)
   dau.sort((a,b) => b.dc - a.dc);
-  // Sát → gần nhất lên đầu
   sat.sort((a,b) => b.diff - a.diff);
-  // Khó → gần nhất lên đầu
   kho.sort((a,b) => b.diff - a.diff);
 
   return { dau, sat, kho };
@@ -393,17 +426,17 @@ function renderBangChuyen(tongChuyen) {
   if (!diemChuanData?.phu_luc_1_chuyen || tongChuyen == null) return "";
   const rows = diemChuanData.phu_luc_1_chuyen.map(lop => {
     const truongs = [
-      { ten:"Lê Quý Đôn",       dc: lop.Le_Quy_Don },
-      { ten:"N.Bỉnh Khiêm",     dc: lop.Nguyen_Binh_Khiem },
-      { ten:"Lê Thánh Tông",    dc: lop.Le_Thanh_Tong }
+      { ten:"Lê Quý Đôn",    dc: lop.Le_Quy_Don },
+      { ten:"N.Bỉnh Khiêm",  dc: lop.Nguyen_Binh_Khiem },
+      { ten:"Lê Thánh Tông", dc: lop.Le_Thanh_Tong }
     ];
     const tds = truongs.map(t => {
       if (!t.dc) return `<td>—</td>`;
-      const diff = Math.round((tongChuyen - t.dc) * 100) / 100;
+      const diff  = Math.round((tongChuyen - t.dc) * 100) / 100;
       const style = diff >= 0
         ? ' style="color:#16a34a;font-weight:800"'
         : diff > -2 ? ' style="color:#f59e0b;font-weight:700"' : '';
-      const icon = diff >= 0 ? "✅" : diff > -2 ? "⚡" : "";
+      const icon  = diff >= 0 ? "✅" : diff > -2 ? "⚡" : "";
       return `<td class="dc"${style}>${t.dc} ${icon}</td>`;
     }).join("");
     return `<tr><td style="text-align:left;font-weight:600">${lop.lop_chuyen}</td>${tds}</tr>`;
@@ -444,7 +477,9 @@ function renderPTDTNT(tongPt) {
 
 // ========== AI ==========
 async function goiAI(info) {
-  const { sbd, ten, van, nn, toan, mon_chuyen, diem_kk, diem_ut, diem_qd, tong_dai_tra, tong_chuyen, rank, total, truongDau, truongSat } = info;
+  const { sbd, ten, van, nn, toan, mon_chuyen, diem_kk, diem_ut, diem_qd,
+          tong_dai_tra, tong_chuyen, rank, total, truongDau, truongSat } = info;
+
   const prompt = `Bạn là AI cà khịa nhưng vẫn động viên học sinh vừa tra điểm thi tuyển sinh lớp 10 Đà Nẵng 2026.
 
 Thông tin thí sinh ${ten} (SBD: ${sbd}):
@@ -500,12 +535,14 @@ async function search() {
   const mon_chuyen = ts.mon_chuyen;
   const diem_kk    = ts.diem_kk;
   const diem_ut    = ts.diem_uu_tien;
-  const diem_qd    = ts.diem_quy_doi;   // ← Điểm quy đổi KQHT-RL
+  const diem_qd    = ts.diem_quy_doi;
   const tong_dt    = ts.tong_dai_tra;
   const tong_pt    = ts.tong_ptdtnt;
   const tong_cv    = ts.tong_chuyen;
 
-  const { rank, total } = tinhRank(tong_dt ?? 0);
+  const { rank, total }   = tinhRank(tong_dt ?? 0);
+  const rankChuyen        = tinhRankChuyen(tong_cv);
+  const rankPTDTNT        = tinhRankPTDTNT(tong_pt);
   const { dau, sat, kho } = goiYTruong(tong_dt ?? 0);
 
   // --- Score boxes ---
@@ -517,16 +554,17 @@ async function search() {
   if (diem_kk    != null) boxes.push(`<div class="score-box kk pop"><div class="mon">Khuyến Khích</div><div class="diem">${diem_kk}</div><div class="label">điểm</div></div>`);
   if (diem_ut    != null) boxes.push(`<div class="score-box ut pop"><div class="mon">Ưu Tiên</div><div class="diem">${diem_ut}</div><div class="label">điểm</div></div>`);
 
-  // Điểm quy đổi luôn hiện nếu có
-  const qdBox = diem_qd != null
-    ? `<div class="score-box qd pop" style="grid-column:1/-1;max-width:240px;margin:0 auto">
-        <div class="mon">📋 Quy Đổi KQHT-RL</div>
-        <div class="diem">${diem_qd}</div>
-        <div class="label">điểm (4 năm học)</div>
-       </div>`
-    : "";
-
   const colsCls = boxes.length <= 3 ? "cols-3" : "cols-4";
+
+  // --- KQHT-RL rectangle ---
+  const qdBox = diem_qd != null ? `
+    <div class="qd-box pop">
+      <div class="qd-left">
+        <div class="qd-label">📋 Điểm Quy Đổi KQHT – RL</div>
+        <div class="qd-sub">Kết quả học tập &amp; rèn luyện 4 năm học</div>
+      </div>
+      <div class="qd-score">${diem_qd}</div>
+    </div>` : "";
 
   // --- Tổng điểm ---
   let tongHtml = `<div class="tong-section">`;
@@ -538,8 +576,42 @@ async function search() {
     tongHtml += `<div class="total-box chuyen pop"><div class="total-label">⭐ TỔNG ĐIỂM CHUYÊN</div><div class="total-score">${tong_cv}</div></div>`;
   tongHtml += `</div>`;
 
+  // --- Rank rows ---
   const rankIcon = rank<=10?"🏆":rank<=50?"🥈":rank<=200?"🥉":"📊";
-  const pct = Math.round((1-rank/total)*100);
+  const pct      = Math.round((1 - rank / total) * 100);
+
+  let rankRowsHtml = `
+    <div class="rank-row">
+      <div class="rank-icon">${rankIcon}</div>
+      <div>
+        <div class="rank-text">🏫 Top ${rank} / ${total} thí sinh đại trà toàn thành phố</div>
+        <div class="rank-sub">Cao hơn ${pct}% thí sinh 📈</div>
+      </div>
+    </div>`;
+
+  if (rankChuyen) {
+    const pctC = Math.round((1 - rankChuyen.rank / rankChuyen.total) * 100);
+    rankRowsHtml += `<hr class="rank-divider">
+    <div class="rank-row">
+      <div class="rank-icon">⭐</div>
+      <div>
+        <div class="rank-text">Top ${rankChuyen.rank} / ${rankChuyen.total} thí sinh thi chuyên</div>
+        <div class="rank-sub">Cao hơn ${pctC}% thí sinh chuyên 📈</div>
+      </div>
+    </div>`;
+  }
+
+  if (rankPTDTNT) {
+    const pctP = Math.round((1 - rankPTDTNT.rank / rankPTDTNT.total) * 100);
+    rankRowsHtml += `<hr class="rank-divider">
+    <div class="rank-row">
+      <div class="rank-icon">🌿</div>
+      <div>
+        <div class="rank-text">Top ${rankPTDTNT.rank} / ${rankPTDTNT.total} thí sinh thi PTDTNT</div>
+        <div class="rank-sub">Cao hơn ${pctP}% thí sinh PTDTNT 📈</div>
+      </div>
+    </div>`;
+  }
 
   function schoolList(arr, cls, badge) {
     return arr.slice(0,4).map(s => {
@@ -567,17 +639,11 @@ async function search() {
     </div>
 
     <div class="scores-grid ${colsCls}">${boxes.join("")}</div>
-    ${qdBox ? `<div style="margin-bottom:16px"><div class="scores-grid">${qdBox}</div></div>` : ""}
+    ${qdBox}
 
     ${tongHtml}
 
-    <div class="rank-box pop">
-      <div class="rank-icon">${rankIcon}</div>
-      <div>
-        <div class="rank-text">Top ${rank} / ${total} thí sinh toàn thành phố</div>
-        <div class="rank-sub">Cao hơn ${pct}% thí sinh trong dữ liệu 📈</div>
-      </div>
-    </div>
+    <div class="rank-box pop">${rankRowsHtml}</div>
 
     <div class="ai-box">
       <div class="ai-label">🤖 AI NHẬN XÉT</div>
@@ -594,8 +660,14 @@ async function search() {
     ${kho.length>0 ? `<div class="section-title">🔴 Khó đậu hơn</div>${schoolList(kho.slice(0,4),"kho","❌ Cần cân nhắc")}` : ""}
   `;
 
+  // --- AI streaming ---
   try {
-    const res = await goiAI({ sbd:ts.so_bao_danh, ten:ts.ho_ten, van, nn, toan, mon_chuyen, diem_kk, diem_ut, diem_qd, tong_dai_tra:tong_dt, tong_chuyen:tong_cv, rank, total, truongDau:dau, truongSat:sat });
+    const res = await goiAI({
+      sbd: ts.so_bao_danh, ten: ts.ho_ten, van, nn, toan,
+      mon_chuyen, diem_kk, diem_ut, diem_qd,
+      tong_dai_tra: tong_dt, tong_chuyen: tong_cv,
+      rank, total, truongDau: dau, truongSat: sat
+    });
     const reader  = res.body.getReader();
     const decoder = new TextDecoder();
     const aiEl    = document.getElementById("aiText");
