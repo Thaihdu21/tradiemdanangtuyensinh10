@@ -25,6 +25,32 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.2); margin-bottom: 20px; animation: fadeUp 0.6s ease;
   }
 
+  /* TABS */
+  .search-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab-btn {
+    flex: 1; padding: 10px; border-radius: 12px; border: 2px solid #e0e0e0;
+    background: white; font-family: inherit; font-size: 14px; font-weight: 700;
+    color: #888; cursor: pointer; transition: all 0.2s;
+  }
+  .tab-btn.active { border-color: #0066cc; color: #0066cc; background: #eff6ff; }
+
+  /* NAME SEARCH */
+  .name-results-wrap { margin-top: 16px; display: none; }
+  .name-results-title { font-size: 13px; color: #888; font-weight: 600; margin-bottom: 10px; }
+  .name-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 16px; border-radius: 14px; margin-bottom: 8px;
+    background: #f8faff; border: 2px solid #e8f0fe;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .name-item:hover { border-color: #0066cc; background: #eff6ff; transform: translateX(3px); }
+  .name-item .ni-left .ni-name { font-size: 15px; font-weight: 700; color: #222; }
+  .name-item .ni-left .ni-meta { font-size: 12px; color: #888; margin-top: 2px; }
+  .name-item .ni-score { font-size: 22px; font-weight: 800; color: #0066cc; flex-shrink: 0; }
+  .name-item .ni-arrow { font-size: 18px; color: #ccc; flex-shrink: 0; }
+  .name-loading { text-align: center; padding: 20px; color: #888; font-size: 14px; }
+  .name-empty   { text-align: center; padding: 20px; color: #ef4444; font-size: 14px; font-weight: 600; }
+
   .input-group { display: flex; gap: 12px; flex-wrap: wrap; }
   .input-group input {
     flex: 1; min-width: 180px; padding: 16px 20px;
@@ -124,20 +150,12 @@
   /* KQHT-RL rectangle */
   .qd-box {
     background: linear-gradient(135deg, #d4fc7922, #96e6a144);
-    border: 2px solid #96e6a1;
-    border-radius: 16px;
-    padding: 16px 24px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    border: 2px solid #96e6a1; border-radius: 16px;
+    padding: 16px 24px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
-  .qd-box .qd-left .qd-label {
-    font-size: 11px; font-weight: 700; color: #666;
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
-  }
-  .qd-box .qd-left .qd-sub { font-size: 12px; color: #888; }
+  .qd-box .qd-left .qd-label { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .qd-box .qd-left .qd-sub  { font-size: 12px; color: #888; }
   .qd-box .qd-score { font-size: 36px; font-weight: 800; color: #15803d; flex-shrink: 0; }
 
   .tong-section { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
@@ -147,7 +165,6 @@
   .total-box.chuyen  { background: linear-gradient(135deg, #db2777, #f472b6); }
   .total-box .total-label { font-size: 12px; opacity: 0.85; margin-bottom: 4px; font-weight: 700; letter-spacing: 1px; }
   .total-box .total-score { font-size: 48px; font-weight: 800; line-height: 1; }
-  .total-box .total-note  { font-size: 11px; opacity: 0.7; margin-top: 4px; }
 
   .rank-box {
     background: linear-gradient(135deg, #ffecd2, #fcb69f);
@@ -235,14 +252,36 @@
   <div class="header">
     <span class="emoji-big">🎓</span>
     <h1>Tra Cứu Điểm Thi<br>Tuyển Sinh Lớp 10 Đà Nẵng 2026</h1>
-    <p>Nhập SBD để xem điểm + gợi ý trường + AI nhận xét 👇</p>
+    <p>Nhập SBD hoặc tìm theo tên để xem điểm + gợi ý trường + AI nhận xét 👇</p>
   </div>
 
   <div class="card">
-    <div class="input-group">
-      <input type="text" id="sbdInput" placeholder="Nhập số báo danh..." maxlength="10"
-        onkeydown="if(event.key==='Enter') search()">
-      <button class="btn-search" id="btnSearch" onclick="search()">🔍 Tra cứu</button>
+    <!-- Tabs -->
+    <div class="search-tabs">
+      <button class="tab-btn active" id="tabSbd"  onclick="switchTab('sbd')">🔢 Số báo danh</button>
+      <button class="tab-btn"        id="tabName" onclick="switchTab('name')">👤 Tìm theo tên</button>
+    </div>
+
+    <!-- Tab SBD -->
+    <div id="paneSbd">
+      <div class="input-group">
+        <input type="text" id="sbdInput" placeholder="Nhập số báo danh..."
+          maxlength="10" onkeydown="if(event.key==='Enter') search()">
+        <button class="btn-search" id="btnSearch" onclick="search()">🔍 Tra cứu</button>
+      </div>
+    </div>
+
+    <!-- Tab Tên -->
+    <div id="paneName" style="display:none">
+      <div class="input-group">
+        <input type="text" id="nameInput" placeholder="Nhập họ tên thí sinh..."
+          maxlength="60" oninput="onNameInput()" onkeydown="if(event.key==='Enter') searchByName()">
+        <button class="btn-search" id="btnName" onclick="searchByName()">🔍 Tìm kiếm</button>
+      </div>
+      <div class="name-results-wrap" id="nameResultsWrap">
+        <div class="name-results-title" id="nameResultsTitle"></div>
+        <div id="nameResultsList"></div>
+      </div>
     </div>
   </div>
 
@@ -270,9 +309,10 @@
 </div>
 
 <script>
-const API_URL = "https://llm.thesparkdaily.com/v1/chat/completions";
-const API_KEY = "sk-Bvd9rSR06Rtroz8NCvTKJA";
-const MODEL   = "deepseek-v4-flash";
+const API_URL  = "https://llm.thesparkdaily.com/v1/chat/completions";
+const API_KEY  = "sk-Bvd9rSR06Rtroz8NCvTKJA";
+const MODEL    = "deepseek-v4-flash";
+const API_BASE = "https://web-production-27237.up.railway.app";
 
 let diemThiData   = null;
 let diemChuanData = null;
@@ -303,10 +343,113 @@ async function loadData() {
 }
 loadData();
 
+// ========== TABS ==========
+function switchTab(tab) {
+  document.getElementById('tabSbd').classList.toggle('active', tab === 'sbd');
+  document.getElementById('tabName').classList.toggle('active', tab === 'name');
+  document.getElementById('paneSbd').style.display  = tab === 'sbd'  ? '' : 'none';
+  document.getElementById('paneName').style.display = tab === 'name' ? '' : 'none';
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('nameResultsWrap').style.display = 'none';
+  document.getElementById('thuKhoaCard').classList.remove('hidden');
+}
+
+// ========== SEARCH BY NAME ==========
+let nameDebounceTimer = null;
+
+function onNameInput() {
+  clearTimeout(nameDebounceTimer);
+  const val = document.getElementById('nameInput').value.trim();
+  if (val.length < 2) {
+    document.getElementById('nameResultsWrap').style.display = 'none';
+    return;
+  }
+  nameDebounceTimer = setTimeout(searchByName, 400);
+}
+
+async function searchByName() {
+  const q = document.getElementById('nameInput').value.trim();
+  if (q.length < 2) return;
+
+  const wrap  = document.getElementById('nameResultsWrap');
+  const title = document.getElementById('nameResultsTitle');
+  const list  = document.getElementById('nameResultsList');
+
+  wrap.style.display = 'block';
+  list.innerHTML = `<div class="name-loading">⏳ Đang tìm kiếm...</div>`;
+  title.textContent = '';
+
+  hideThuKhoa();
+  document.getElementById('result').style.display = 'none';
+
+  try {
+    const res  = await fetch(`${API_BASE}/api/search-name?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+
+    if (!data.results || data.results.length === 0) {
+      title.textContent = '';
+      list.innerHTML = `<div class="name-empty">😅 Không tìm thấy thí sinh tên "<strong>${q}</strong>"</div>`;
+      return;
+    }
+
+    // Chỉ 1 kết quả → load luôn
+    if (data.total === 1) {
+      wrap.style.display = 'none';
+      await loadStudentBySbd(String(data.results[0].so_bao_danh));
+      return;
+    }
+
+    // Nhiều kết quả → hiện danh sách
+    title.textContent = `Tìm thấy ${data.total} thí sinh${data.total > 50 ? ' (hiển thị 50 đầu)' : ''}`;
+    list.innerHTML = data.results.map(s => `
+      <div class="name-item pop" onclick="selectStudent('${s.so_bao_danh}')">
+        <div class="ni-left">
+          <div class="ni-name">${s.ho_ten ?? '—'}</div>
+          <div class="ni-meta">
+            SBD: ${s.so_bao_danh}
+            ${s.toan       != null ? ` &nbsp;•&nbsp; Toán: ${s.toan}`        : ''}
+            ${s.ngu_van    != null ? ` &nbsp;•&nbsp; Văn: ${s.ngu_van}`      : ''}
+            ${s.ngoai_ngu  != null ? ` &nbsp;•&nbsp; NN: ${s.ngoai_ngu}`     : ''}
+            ${s.mon_chuyen != null ? ` &nbsp;•&nbsp; Chuyên: ${s.mon_chuyen}`: ''}
+          </div>
+        </div>
+        <div class="ni-score">${s.tong_dai_tra ?? '—'}</div>
+        <div class="ni-arrow">›</div>
+      </div>`).join('');
+
+  } catch(e) {
+    list.innerHTML = `<div class="name-empty">❌ Lỗi kết nối server: ${e.message}</div>`;
+  }
+}
+
+async function selectStudent(sbd) {
+  document.getElementById('nameResultsWrap').style.display = 'none';
+  await loadStudentBySbd(String(sbd));
+}
+
+async function loadStudentBySbd(sbd) {
+  const resultDiv  = document.getElementById('result');
+  const contentDiv = document.getElementById('resultContent');
+  resultDiv.style.display = 'block';
+  contentDiv.innerHTML = `<div class="name-loading">⏳ Đang tải thông tin...</div>`;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/student/${sbd}`);
+    if (!res.ok) throw new Error('Không tìm thấy');
+    const ts = await res.json();
+
+    if (!diemThiData) diemThiData = {};
+    diemThiData[String(ts.so_bao_danh)] = ts;
+    document.getElementById('sbdInput').value = String(ts.so_bao_danh);
+    await search();
+  } catch(e) {
+    contentDiv.innerHTML = `<div class="not-found">❌ ${e.message}</div>`;
+  }
+}
+
 // ========== THỦ KHOA ==========
 function renderThuKhoa() {
   if (!diemThiData) return;
-
   const mode    = document.getElementById("tkModeSelect").value;
   const medals  = ["🥇","🥈","🥉"];
   const classes = ["rank1","rank2","rank3"];
@@ -315,7 +458,6 @@ function renderThuKhoa() {
   const tongField = mode === "chuyen"  ? "tong_chuyen"
                   : mode === "ptdtnt" ? "tong_ptdtnt"
                   : "tong_dai_tra";
-
   const modeLabel = mode === "chuyen"  ? "tổng chuyên"
                   : mode === "ptdtnt" ? "tổng PTDTNT"
                   : "đại trà";
@@ -323,24 +465,19 @@ function renderThuKhoa() {
   const sorted = Object.values(diemThiData)
     .filter(ts => ts[tongField] != null)
     .map(ts => ({
-      sbd:        String(ts.so_bao_danh),
-      ten:        ts.ho_ten ?? "—",
-      van:        ts.ngu_van,
-      nn:         ts.ngoai_ngu,
-      toan:       ts.toan,
-      mon_chuyen: ts.mon_chuyen,
-      tong:       ts[tongField]
+      sbd: String(ts.so_bao_danh), ten: ts.ho_ten ?? "—",
+      van: ts.ngu_van, nn: ts.ngoai_ngu, toan: ts.toan,
+      mon_chuyen: ts.mon_chuyen, tong: ts[tongField]
     }))
-    .sort((a,b) => b.tong - a.tong)
-    .slice(0,3);
+    .sort((a,b) => b.tong - a.tong).slice(0,3);
 
   if (sorted.length === 0) {
     document.getElementById("tkList").innerHTML =
-      `<div style="text-align:center;color:#aaa;padding:16px;font-size:14px">Không có dữ liệu cho loại này</div>`;
+      `<div style="text-align:center;color:#aaa;padding:16px;font-size:14px">Không có dữ liệu</div>`;
     return;
   }
 
-  const html = sorted.map((ts,i) => `
+  document.getElementById("tkList").innerHTML = sorted.map((ts,i) => `
     <div class="tk-item ${classes[i]} pop" style="animation-delay:${i*0.12}s">
       <div class="tk-medal">${medals[i]}</div>
       <div class="tk-info">
@@ -358,8 +495,6 @@ function renderThuKhoa() {
         <div class="tk-score-label">${modeLabel}</div>
       </div>
     </div>`).join("");
-
-  document.getElementById("tkList").innerHTML = html;
 }
 
 function hideThuKhoa() {
@@ -369,55 +504,39 @@ function hideThuKhoa() {
 // ========== XẾP HẠNG ==========
 function tinhRank(tongDaiTra) {
   if (!diemThiData) return { rank:"?", total:"?" };
-  const all = Object.values(diemThiData)
-    .map(d => d.tong_dai_tra ?? 0)
-    .sort((a,b) => b-a);
+  const all = Object.values(diemThiData).map(d => d.tong_dai_tra ?? 0).sort((a,b) => b-a);
   const rank = all.findIndex(d => d <= tongDaiTra) + 1;
   return { rank, total: all.length };
 }
-
 function tinhRankChuyen(tongChuyen) {
   if (!diemThiData || tongChuyen == null) return null;
-  const all = Object.values(diemThiData)
-    .filter(d => d.tong_chuyen != null)
-    .map(d => d.tong_chuyen)
-    .sort((a,b) => b-a);
+  const all = Object.values(diemThiData).filter(d => d.tong_chuyen != null).map(d => d.tong_chuyen).sort((a,b) => b-a);
   if (all.length === 0) return null;
-  const rank = all.findIndex(d => d <= tongChuyen) + 1;
-  return { rank, total: all.length };
+  return { rank: all.findIndex(d => d <= tongChuyen) + 1, total: all.length };
 }
-
 function tinhRankPTDTNT(tongPt) {
   if (!diemThiData || tongPt == null) return null;
-  const all = Object.values(diemThiData)
-    .filter(d => d.tong_ptdtnt != null)
-    .map(d => d.tong_ptdtnt)
-    .sort((a,b) => b-a);
+  const all = Object.values(diemThiData).filter(d => d.tong_ptdtnt != null).map(d => d.tong_ptdtnt).sort((a,b) => b-a);
   if (all.length === 0) return null;
-  const rank = all.findIndex(d => d <= tongPt) + 1;
-  return { rank, total: all.length };
+  return { rank: all.findIndex(d => d <= tongPt) + 1, total: all.length };
 }
 
 // ========== GỢI Ý TRƯỜNG ==========
 function goiYTruong(tongDaiTra) {
   if (!diemChuanData?.phu_luc_4_cong_lap) return { dau:[], sat:[], kho:[] };
   const dau=[], sat=[], kho=[];
-
   diemChuanData.phu_luc_4_cong_lap.forEach(t => {
     const dc = t.diem_chuan;
     if (!dc) return;
     const diff = Math.round((tongDaiTra - dc) * 100) / 100;
     const obj  = { ten: t.ten_truong, dc, diff };
-
-    if (diff >= 0)      dau.push(obj);
+    if (diff >= 0) dau.push(obj);
     else if (diff > -1) sat.push(obj);
-    else                kho.push(obj);
+    else kho.push(obj);
   });
-
   dau.sort((a,b) => b.dc - a.dc);
   sat.sort((a,b) => b.diff - a.diff);
   kho.sort((a,b) => b.diff - a.diff);
-
   return { dau, sat, kho };
 }
 
@@ -433,25 +552,17 @@ function renderBangChuyen(tongChuyen) {
     const tds = truongs.map(t => {
       if (!t.dc) return `<td>—</td>`;
       const diff  = Math.round((tongChuyen - t.dc) * 100) / 100;
-      const style = diff >= 0
-        ? ' style="color:#16a34a;font-weight:800"'
-        : diff > -2 ? ' style="color:#f59e0b;font-weight:700"' : '';
+      const style = diff >= 0 ? ' style="color:#16a34a;font-weight:800"' : diff > -2 ? ' style="color:#f59e0b;font-weight:700"' : '';
       const icon  = diff >= 0 ? "✅" : diff > -2 ? "⚡" : "";
       return `<td class="dc"${style}>${t.dc} ${icon}</td>`;
     }).join("");
     return `<tr><td style="text-align:left;font-weight:600">${lop.lop_chuyen}</td>${tds}</tr>`;
   }).join("");
-
   return `
     <div class="section-title">🎯 So sánh điểm chuyên (tổng chuyên: <strong>${tongChuyen}</strong>)</div>
     <div style="overflow-x:auto;margin-bottom:8px">
       <table class="chuyen-table">
-        <thead><tr>
-          <th>Lớp chuyên</th>
-          <th>Lê Quý Đôn</th>
-          <th>N.Bỉnh Khiêm</th>
-          <th>Lê Thánh Tông</th>
-        </tr></thead>
+        <thead><tr><th>Lớp chuyên</th><th>Lê Quý Đôn</th><th>N.Bỉnh Khiêm</th><th>Lê Thánh Tông</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>
@@ -479,7 +590,6 @@ function renderPTDTNT(tongPt) {
 async function goiAI(info) {
   const { sbd, ten, van, nn, toan, mon_chuyen, diem_kk, diem_ut, diem_qd,
           tong_dai_tra, tong_chuyen, rank, total, truongDau, truongSat } = info;
-
   const prompt = `Bạn là AI cà khịa nhưng vẫn động viên học sinh vừa tra điểm thi tuyển sinh lớp 10 Đà Nẵng 2026.
 
 Thông tin thí sinh ${ten} (SBD: ${sbd}):
@@ -519,9 +629,7 @@ async function search() {
   const contentDiv = document.getElementById("resultContent");
   resultDiv.style.display = "block";
 
-  const ts = diemThiData[sbd]
-           ?? diemThiData[sbd.padStart(5,"0")]
-           ?? null;
+  const ts = diemThiData[sbd] ?? diemThiData[sbd.padStart(5,"0")] ?? null;
 
   if (!ts) {
     contentDiv.innerHTML = `<div class="not-found">😅 Không tìm thấy SBD <strong>${sbd}</strong><br><small>Kiểm tra lại số báo danh nhé!</small></div>`;
@@ -545,7 +653,7 @@ async function search() {
   const rankPTDTNT        = tinhRankPTDTNT(tong_pt);
   const { dau, sat, kho } = goiYTruong(tong_dt ?? 0);
 
-  // --- Score boxes ---
+  // Score boxes
   const boxes = [];
   boxes.push(`<div class="score-box van pop"><div class="mon">Ngữ Văn</div><div class="diem">${van ?? "—"}</div><div class="label">điểm</div></div>`);
   boxes.push(`<div class="score-box nn pop"><div class="mon">Ngoại Ngữ</div><div class="diem">${nn ?? "—"}</div><div class="label">điểm</div></div>`);
@@ -553,10 +661,9 @@ async function search() {
   if (mon_chuyen != null) boxes.push(`<div class="score-box chuyen pop"><div class="mon">Môn Chuyên</div><div class="diem">${mon_chuyen}</div><div class="label">điểm</div></div>`);
   if (diem_kk    != null) boxes.push(`<div class="score-box kk pop"><div class="mon">Khuyến Khích</div><div class="diem">${diem_kk}</div><div class="label">điểm</div></div>`);
   if (diem_ut    != null) boxes.push(`<div class="score-box ut pop"><div class="mon">Ưu Tiên</div><div class="diem">${diem_ut}</div><div class="label">điểm</div></div>`);
-
   const colsCls = boxes.length <= 3 ? "cols-3" : "cols-4";
 
-  // --- KQHT-RL rectangle ---
+  // KQHT-RL
   const qdBox = diem_qd != null ? `
     <div class="qd-box pop">
       <div class="qd-left">
@@ -566,20 +673,16 @@ async function search() {
       <div class="qd-score">${diem_qd}</div>
     </div>` : "";
 
-  // --- Tổng điểm ---
+  // Tổng điểm
   let tongHtml = `<div class="tong-section">`;
-  if (tong_dt != null)
-    tongHtml += `<div class="total-box dai-tra pop"><div class="total-label">🏫 TỔNG ĐIỂM ĐẠI TRÀ</div><div class="total-score">${tong_dt}</div></div>`;
-  if (tong_pt != null)
-    tongHtml += `<div class="total-box ptdtnt pop"><div class="total-label">🌿 TỔNG ĐIỂM PTDTNT</div><div class="total-score">${tong_pt}</div></div>`;
-  if (tong_cv != null)
-    tongHtml += `<div class="total-box chuyen pop"><div class="total-label">⭐ TỔNG ĐIỂM CHUYÊN</div><div class="total-score">${tong_cv}</div></div>`;
+  if (tong_dt != null) tongHtml += `<div class="total-box dai-tra pop"><div class="total-label">🏫 TỔNG ĐIỂM ĐẠI TRÀ</div><div class="total-score">${tong_dt}</div></div>`;
+  if (tong_pt != null) tongHtml += `<div class="total-box ptdtnt pop"><div class="total-label">🌿 TỔNG ĐIỂM PTDTNT</div><div class="total-score">${tong_pt}</div></div>`;
+  if (tong_cv != null) tongHtml += `<div class="total-box chuyen pop"><div class="total-label">⭐ TỔNG ĐIỂM CHUYÊN</div><div class="total-score">${tong_cv}</div></div>`;
   tongHtml += `</div>`;
 
-  // --- Rank rows ---
+  // Rank rows
   const rankIcon = rank<=10?"🏆":rank<=50?"🥈":rank<=200?"🥉":"📊";
   const pct      = Math.round((1 - rank / total) * 100);
-
   let rankRowsHtml = `
     <div class="rank-row">
       <div class="rank-icon">${rankIcon}</div>
@@ -588,7 +691,6 @@ async function search() {
         <div class="rank-sub">Cao hơn ${pct}% thí sinh 📈</div>
       </div>
     </div>`;
-
   if (rankChuyen) {
     const pctC = Math.round((1 - rankChuyen.rank / rankChuyen.total) * 100);
     rankRowsHtml += `<hr class="rank-divider">
@@ -600,7 +702,6 @@ async function search() {
       </div>
     </div>`;
   }
-
   if (rankPTDTNT) {
     const pctP = Math.round((1 - rankPTDTNT.rank / rankPTDTNT.total) * 100);
     rankRowsHtml += `<hr class="rank-divider">
@@ -615,17 +716,12 @@ async function search() {
 
   function schoolList(arr, cls, badge) {
     return arr.slice(0,4).map(s => {
-      const diffStr = s.diff === 0
-        ? "Bằng điểm chuẩn"
-        : s.diff > 0
-          ? `Hơn ${s.diff} điểm`
-          : `Thiếu ${Math.abs(s.diff)} điểm`;
-      return `
-        <div class="school-item ${cls}">
-          <div><div class="school-name">${s.ten}</div>
-          <div class="school-meta">Điểm chuẩn 2026: ${s.dc} &nbsp;•&nbsp; ${diffStr}</div></div>
-          <span class="school-badge">${badge}</span>
-        </div>`;
+      const diffStr = s.diff === 0 ? "Bằng điểm chuẩn" : s.diff > 0 ? `Hơn ${s.diff} điểm` : `Thiếu ${Math.abs(s.diff)} điểm`;
+      return `<div class="school-item ${cls}">
+        <div><div class="school-name">${s.ten}</div>
+        <div class="school-meta">Điểm chuẩn 2026: ${s.dc} &nbsp;•&nbsp; ${diffStr}</div></div>
+        <span class="school-badge">${badge}</span>
+      </div>`;
     }).join("");
   }
 
@@ -637,30 +733,24 @@ async function search() {
         <span class="sbd-tag">SBD: ${ts.so_bao_danh} • Kết quả thi Lớp 10 Đà Nẵng 2026</span>
       </div>
     </div>
-
     <div class="scores-grid ${colsCls}">${boxes.join("")}</div>
     ${qdBox}
-
     ${tongHtml}
-
     <div class="rank-box pop">${rankRowsHtml}</div>
-
     <div class="ai-box">
       <div class="ai-label">🤖 AI NHẬN XÉT</div>
       <div class="ai-text" id="aiText">
         <div class="ai-typing"><span></span><span></span><span></span></div>
       </div>
     </div>
-
     ${renderBangChuyen(tong_cv)}
     ${renderPTDTNT(tong_pt)}
-
     ${dau.length>0 ? `<div class="section-title">🟢 Trường công lập có thể đậu</div>${schoolList(dau,"dau","✅ Khả năng cao")}` : ""}
     ${sat.length>0 ? `<div class="section-title">🟡 Sát sao (dưới 1 điểm)</div>${schoolList(sat,"sat","⚡ Cần theo dõi")}` : ""}
     ${kho.length>0 ? `<div class="section-title">🔴 Khó đậu hơn</div>${schoolList(kho.slice(0,4),"kho","❌ Cần cân nhắc")}` : ""}
   `;
 
-  // --- AI streaming ---
+  // AI streaming
   try {
     const res = await goiAI({
       sbd: ts.so_bao_danh, ten: ts.ho_ten, van, nn, toan,
