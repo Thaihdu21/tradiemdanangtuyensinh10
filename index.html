@@ -7,223 +7,203 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: 'Be Vietnam Pro', sans-serif;
     min-height: 100vh;
     background: linear-gradient(135deg, #0066cc 0%, #0099ff 50%, #00ccff 100%);
-    display: flex; flex-direction: column; align-items: center;
-    padding: 24px 12px;
+    display: flex; flex-direction: column; align-items: center; padding: 30px 16px;
   }
-  .container { width: 100%; max-width: 680px; }
+  .container { width: 100%; max-width: 700px; }
 
-  /* HEADER */
-  .header { text-align: center; margin-bottom: 20px; animation: fadeDown 0.6s ease; }
-  .header .emoji-big { font-size: 52px; display: block; margin-bottom: 8px; }
-  .header h1 { color: white; font-size: 22px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.3; }
-  .header p { color: rgba(255,255,255,0.85); margin-top: 6px; font-size: 13px; }
+  .header { text-align: center; margin-bottom: 30px; animation: fadeDown 0.6s ease; }
+  .header .emoji-big { font-size: 60px; display: block; margin-bottom: 10px; }
+  .header h1 { color: white; font-size: 24px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.3; }
+  .header p { color: rgba(255,255,255,0.85); margin-top: 8px; font-size: 14px; }
 
-  /* CARD */
   .card {
-    background: white; border-radius: 20px; padding: 20px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.18); margin-bottom: 14px;
+    background: white; border-radius: 24px; padding: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2); margin-bottom: 20px; animation: fadeUp 0.6s ease;
   }
 
-  /* INPUT */
-  .input-wrap { display: flex; gap: 10px; }
-  .input-wrap input {
-    flex: 1; padding: 14px 16px;
-    border: 2.5px solid #e0e0e0; border-radius: 12px;
-    font-size: 17px; font-family: inherit; font-weight: 700;
-    letter-spacing: 2px; outline: none; transition: all 0.25s; color: #333;
+  .input-group { display: flex; gap: 12px; flex-wrap: wrap; }
+  .input-group input {
+    flex: 1; min-width: 180px; padding: 16px 20px;
+    border: 2.5px solid #e0e0e0; border-radius: 14px;
+    font-size: 18px; font-family: inherit; font-weight: 600; letter-spacing: 2px;
+    outline: none; transition: all 0.3s; color: #333;
   }
-  .input-wrap input:focus { border-color: #0066cc; box-shadow: 0 0 0 3px rgba(0,102,204,0.15); }
-  .input-wrap input::placeholder { letter-spacing: 0; font-weight: 400; color: #bbb; font-size: 15px; }
+  .input-group input:focus { border-color: #0066cc; box-shadow: 0 0 0 4px rgba(0,102,204,0.15); }
+  .input-group input::placeholder { letter-spacing: 0; font-weight: 400; color: #aaa; }
   .btn-search {
-    padding: 14px 22px;
+    padding: 16px 28px;
     background: linear-gradient(135deg, #0066cc, #0099ff);
-    color: white; border: none; border-radius: 12px;
-    font-size: 15px; font-weight: 700; font-family: inherit;
-    cursor: pointer; transition: all 0.25s; white-space: nowrap; flex-shrink: 0;
+    color: white; border: none; border-radius: 14px;
+    font-size: 16px; font-weight: 700; font-family: inherit;
+    cursor: pointer; transition: all 0.3s; white-space: nowrap;
   }
-  .btn-search:active { transform: scale(0.97); }
-  .btn-search:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-search:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,102,204,0.5); }
+  .btn-search:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  /* THỦ KHOA CARD */
+  /* THỦ KHOA */
   #thuKhoaCard {
-    background: white; border-radius: 20px; padding: 18px 20px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.18); margin-bottom: 14px;
-    transition: all 0.35s ease; overflow: hidden;
+    background: white; border-radius: 24px; padding: 24px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2); margin-bottom: 20px;
+    animation: fadeUp 0.6s ease; transition: all 0.4s ease; overflow: hidden;
   }
-  #thuKhoaCard.hidden { opacity: 0; max-height: 0; padding: 0 20px; margin-bottom: 0; pointer-events: none; }
-
-  .tk-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-  .tk-header .tk-title { font-size: 15px; font-weight: 800; color: #222; }
-  .tk-mode-wrap { margin-left: auto; }
+  #thuKhoaCard.hidden { opacity: 0; max-height: 0; padding: 0 28px; margin-bottom: 0; pointer-events: none; }
+  .thu-khoa-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .thu-khoa-header .tk-title { font-size: 16px; font-weight: 800; color: #333; }
   .tk-mode-select {
-    padding: 6px 10px; border: 2px solid #0066cc; border-radius: 20px;
-    font-size: 12px; font-weight: 700; color: #0066cc; background: white;
-    font-family: inherit; cursor: pointer; outline: none;
+    margin-left: auto; padding: 6px 12px; border: 2px solid #0066cc; border-radius: 20px;
+    font-size: 13px; font-weight: 700; color: #0066cc; background: white;
+    font-family: inherit; cursor: pointer; outline: none; transition: all 0.2s;
   }
-
-  .tk-list { display: flex; flex-direction: column; gap: 8px; }
+  .tk-mode-select:hover { background: #0066cc; color: white; }
+  .tk-list { display: flex; flex-direction: column; gap: 10px; }
   .tk-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px; border-radius: 14px; transition: transform 0.2s;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border-radius: 16px; transition: transform 0.2s;
   }
-  .tk-item:active { transform: scale(0.99); }
+  .tk-item:hover { transform: translateX(4px); }
   .tk-item.rank1 { background: linear-gradient(135deg,#fff8e1,#ffe082); border: 2px solid #ffd54f; }
-  .tk-item.rank2 { background: linear-gradient(135deg,#f5f5f5,#e8e8e8); border: 2px solid #bdbdbd; }
+  .tk-item.rank2 { background: linear-gradient(135deg,#f5f5f5,#e0e0e0); border: 2px solid #bdbdbd; }
   .tk-item.rank3 { background: linear-gradient(135deg,#fbe9e7,#ffccbc); border: 2px solid #ffab91; }
-  .tk-medal { font-size: 26px; flex-shrink: 0; }
+  .tk-medal { font-size: 28px; flex-shrink: 0; }
   .tk-info { flex: 1; min-width: 0; }
-  .tk-sbd  { font-size: 11px; color: #999; font-weight: 600; }
-  .tk-name { font-size: 14px; font-weight: 800; color: #222; margin-top: 1px;
-             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tk-tags { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
-  .tk-tag  { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;
-             background: rgba(255,255,255,0.75); color: #555; }
+  .tk-info .tk-sbd { font-size: 13px; color: #888; font-weight: 600; }
+  .tk-info .tk-name { font-size: 15px; font-weight: 800; color: #222; margin-top: 1px; }
   .tk-score-box { text-align: right; flex-shrink: 0; }
-  .tk-score { font-size: 26px; font-weight: 800; line-height: 1; }
+  .tk-score-box .tk-score { font-size: 28px; font-weight: 800; line-height: 1; }
   .tk-item.rank1 .tk-score { color: #f59e0b; }
   .tk-item.rank2 .tk-score { color: #6b7280; }
   .tk-item.rank3 .tk-score { color: #ea580c; }
-  .tk-slabel { font-size: 10px; color: #aaa; margin-top: 2px; }
+  .tk-score-box .tk-score-label { font-size: 11px; color: #aaa; margin-top: 2px; }
+  .tk-details { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .tk-tag { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: rgba(255,255,255,0.7); color: #555; }
 
   /* KẾT QUẢ */
   #result { display: none; }
-
   .student-header {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 18px; padding-bottom: 16px; border-bottom: 2px dashed #f0f0f0;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;
   }
   .avatar {
-    width: 56px; height: 56px; border-radius: 50%;
+    width: 64px; height: 64px; border-radius: 50%;
     background: linear-gradient(135deg,#0066cc,#00ccff);
     display: flex; align-items: center; justify-content: center;
-    font-size: 26px; flex-shrink: 0;
+    font-size: 30px; flex-shrink: 0;
   }
-  .stu-name { font-size: 18px; color: #111; font-weight: 800; line-height: 1.2; }
-  .stu-sub  { font-size: 12px; color: #999; margin-top: 3px; }
+  .student-info h2 { font-size: 20px; color: #222; font-weight: 800; }
+  .student-info .sbd-tag { font-size: 13px; color: #888; }
 
-  /* SCORES */
-  .scores-grid { display: grid; gap: 10px; margin-bottom: 14px; }
-  .g3 { grid-template-columns: repeat(3,1fr); }
-  .g4 { grid-template-columns: repeat(4,1fr); }
-  .g2 { grid-template-columns: repeat(2,1fr); }
+  .scores-grid { display: grid; gap: 12px; margin-bottom: 16px; }
+  .scores-grid.cols-3 { grid-template-columns: repeat(3,1fr); }
+  .scores-grid.cols-4 { grid-template-columns: repeat(4,1fr); }
 
-  .sbox { border-radius: 14px; padding: 14px 8px; text-align: center; }
-  .sbox.van    { background:linear-gradient(135deg,#f093fb18,#f093fb38); border:2px solid #f093fb; }
-  .sbox.nn     { background:linear-gradient(135deg,#4facfe18,#4facfe38); border:2px solid #4facfe; }
-  .sbox.toan   { background:linear-gradient(135deg,#43e97b18,#43e97b38); border:2px solid #43e97b; }
-  .sbox.chuyen { background:linear-gradient(135deg,#fa709a18,#fa709a38); border:2px solid #fa709a; }
-  .sbox.kk     { background:linear-gradient(135deg,#ffd20018,#ffd20038); border:2px solid #ffd200; }
-  .sbox.ut     { background:linear-gradient(135deg,#a8edea18,#a8edea38); border:2px solid #a8edea; }
-  .sbox.qd     { background:linear-gradient(135deg,#96e6a118,#96e6a138); border:2px solid #96e6a1; }
-  .sbox .mon   { font-size: 10px; font-weight: 700; color: #777; margin-bottom: 5px;
-                 text-transform: uppercase; letter-spacing: 0.3px; }
-  .sbox .diem  { font-size: 28px; font-weight: 800; line-height: 1; color: #222; }
-  .sbox.van    .diem { color:#c026d3; }
-  .sbox.nn     .diem { color:#0284c7; }
-  .sbox.toan   .diem { color:#16a34a; }
-  .sbox.chuyen .diem { color:#db2777; }
-  .sbox.kk     .diem { color:#b45309; }
-  .sbox.ut     .diem { color:#0891b2; }
-  .sbox.qd     .diem { color:#15803d; font-size:24px; }
-  .sbox .lbl   { font-size: 10px; color: #aaa; margin-top: 3px; }
+  .score-box { border-radius: 16px; padding: 16px 10px; text-align: center; }
+  .score-box.van    { background:linear-gradient(135deg,#f093fb22,#f093fb44); border:2px solid #f093fb; }
+  .score-box.nn     { background:linear-gradient(135deg,#4facfe22,#4facfe44); border:2px solid #4facfe; }
+  .score-box.toan   { background:linear-gradient(135deg,#43e97b22,#43e97b44); border:2px solid #43e97b; }
+  .score-box.chuyen { background:linear-gradient(135deg,#fa709a22,#fa709a44); border:2px solid #fa709a; }
+  .score-box.kk     { background:linear-gradient(135deg,#ffd20022,#ffd20044); border:2px solid #ffd200; }
+  .score-box.ut     { background:linear-gradient(135deg,#a8edea22,#a8edea44); border:2px solid #a8edea; }
+  .score-box .mon   { font-size: 11px; font-weight: 700; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .score-box .diem  { font-size: 32px; font-weight: 800; color: #333; line-height: 1; }
+  .score-box.van    .diem { color:#c026d3; }
+  .score-box.nn     .diem { color:#0284c7; }
+  .score-box.toan   .diem { color:#16a34a; }
+  .score-box.chuyen .diem { color:#db2777; }
+  .score-box.kk     .diem { color:#b45309; }
+  .score-box.ut     .diem { color:#0891b2; }
+  .score-box .label { font-size: 11px; color: #999; margin-top: 4px; }
 
-  /* QUY ĐỔI - full width */
+  /* QUY ĐỔI */
   .qd-bar {
-    border-radius: 14px; padding: 14px 20px; margin-bottom: 14px;
-    background: linear-gradient(135deg,#96e6a118,#96e6a138); border: 2px solid #96e6a1;
-    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(135deg,#96e6a122,#96e6a144); border: 2px solid #96e6a1;
+    border-radius: 16px; padding: 16px 20px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 16px;
   }
-  .qd-bar .qd-icon { font-size: 28px; flex-shrink: 0; }
-  .qd-bar .qd-info { flex: 1; }
-  .qd-bar .qd-label { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
-  .qd-bar .qd-val   { font-size: 28px; font-weight: 800; color: #15803d; line-height: 1.1; }
-  .qd-bar .qd-sub   { font-size: 11px; color: #888; margin-top: 2px; }
+  .qd-bar .qd-icon  { font-size: 32px; flex-shrink: 0; }
+  .qd-bar .qd-label { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+  .qd-bar .qd-val   { font-size: 32px; font-weight: 800; color: #15803d; line-height: 1.1; }
+  .qd-bar .qd-sub   { font-size: 12px; color: #888; margin-top: 2px; }
 
   /* TỔNG */
-  .tong-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-  .tong-box { border-radius: 14px; padding: 16px 18px; color: white; display: flex; align-items: center; gap: 14px; }
-  .tong-box.dt  { background: linear-gradient(135deg,#0066cc,#0099ff); }
-  .tong-box.pt  { background: linear-gradient(135deg,#7c3aed,#a855f7); }
-  .tong-box.cv  { background: linear-gradient(135deg,#db2777,#f472b6); }
-  .tong-box .tb-icon  { font-size: 30px; flex-shrink: 0; }
-  .tong-box .tb-info  { flex: 1; }
-  .tong-box .tb-label { font-size: 11px; opacity: 0.85; font-weight: 700; letter-spacing: 0.5px; }
-  .tong-box .tb-score { font-size: 40px; font-weight: 800; line-height: 1.1; }
+  .tong-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .total-box { border-radius: 16px; padding: 18px 20px; color: white; display: flex; align-items: center; gap: 16px; }
+  .total-box.dai-tra { background: linear-gradient(135deg,#0066cc,#0099ff); }
+  .total-box.ptdtnt  { background: linear-gradient(135deg,#7c3aed,#a855f7); }
+  .total-box.chuyen  { background: linear-gradient(135deg,#db2777,#f472b6); }
+  .total-box .tb-icon  { font-size: 36px; flex-shrink: 0; }
+  .total-box .tb-label { font-size: 12px; opacity: 0.85; font-weight: 700; letter-spacing: 0.5px; }
+  .total-box .tb-score { font-size: 48px; font-weight: 800; line-height: 1.1; }
 
   /* RANK */
-  .rank-section { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-  .rank-chip {
-    border-radius: 14px; padding: 13px 16px;
-    display: flex; align-items: center; gap: 12px;
+  .rank-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .rank-box {
+    border-radius: 16px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 14px;
   }
-  .rank-chip.dt { background: linear-gradient(135deg,#ffecd2,#fcb69f); }
-  .rank-chip.cv { background: linear-gradient(135deg,#fce4ec,#f8bbd0); }
-  .rank-chip.pt { background: linear-gradient(135deg,#ede7f6,#d1c4e9); }
-  .rank-chip .ri { font-size: 28px; flex-shrink: 0; }
-  .rank-chip.dt .rt { color:#92400e; }
-  .rank-chip.cv .rt { color:#880e4f; }
-  .rank-chip.pt .rt { color:#4527a0; }
-  .rank-chip .rt { font-size: 14px; font-weight: 700; }
-  .rank-chip .rs { font-size: 12px; opacity: 0.75; margin-top: 2px; }
+  .rank-box.dt { background: linear-gradient(135deg,#ffecd2,#fcb69f); }
+  .rank-box.cv { background: linear-gradient(135deg,#fce4ec,#f8bbd0); }
+  .rank-box.pt { background: linear-gradient(135deg,#ede7f6,#d1c4e9); }
+  .rank-box .rank-icon { font-size: 36px; flex-shrink: 0; }
+  .rank-box.dt .rank-text { color:#92400e; }
+  .rank-box.cv .rank-text { color:#880e4f; }
+  .rank-box.pt .rank-text { color:#4527a0; }
+  .rank-box .rank-text { font-size: 15px; font-weight: 700; }
+  .rank-box.dt .rank-sub { color:#b45309; }
+  .rank-box.cv .rank-sub { color:#ad1457; }
+  .rank-box.pt .rank-sub { color:#512da8; }
+  .rank-box .rank-sub  { font-size: 13px; margin-top: 2px; }
 
   /* AI */
   .ai-box {
     background: linear-gradient(135deg,#1a1a2e,#16213e);
-    border-radius: 16px; padding: 18px; margin-bottom: 16px;
-    position: relative; overflow: hidden;
+    border-radius: 16px; padding: 20px; margin-bottom: 20px; position: relative; overflow: hidden;
   }
-  .ai-box::before { content:'🤖'; position:absolute; right:-8px; top:-8px; font-size:70px; opacity:0.07; }
-  .ai-label { font-size:10px; color:#60a5fa; font-weight:700; letter-spacing:2px; margin-bottom:8px; }
-  .ai-text  { color:#e2e8f0; font-size:14px; line-height:1.8; }
-  .ai-typing { display:flex; gap:5px; align-items:center; padding:8px 0; }
-  .ai-typing span { width:7px; height:7px; border-radius:50%; background:#60a5fa; animation:typing 1.2s infinite; }
-  .ai-typing span:nth-child(2) { animation-delay:.2s; }
-  .ai-typing span:nth-child(3) { animation-delay:.4s; }
+  .ai-box::before { content:'🤖'; position:absolute; right:-10px; top:-10px; font-size:80px; opacity:0.08; }
+  .ai-box .ai-label { font-size:11px; color:#60a5fa; font-weight:700; letter-spacing:2px; margin-bottom:10px; }
+  .ai-box .ai-text  { color:#e2e8f0; font-size:15px; line-height:1.8; }
+  .ai-box .ai-typing { display:flex; gap:6px; align-items:center; padding:10px 0; }
+  .ai-box .ai-typing span { width:8px; height:8px; border-radius:50%; background:#60a5fa; animation:typing 1.2s infinite; }
+  .ai-box .ai-typing span:nth-child(2) { animation-delay:.2s; }
+  .ai-box .ai-typing span:nth-child(3) { animation-delay:.4s; }
 
   /* TRƯỜNG */
-  .sec-title { font-size:14px; font-weight:800; color:#333; margin:14px 0 8px; }
+  .section-title { font-size:15px; font-weight:800; color:#444; margin:16px 0 10px; }
   .school-item {
     display:flex; align-items:center; justify-content:space-between;
-    padding:12px 14px; border-radius:12px; margin-bottom:7px;
-    gap:10px; transition:transform 0.15s;
+    padding:14px 16px; border-radius:12px; margin-bottom:8px; transition:transform 0.2s; gap:10px;
   }
-  .school-item:active { transform:scale(0.99); }
+  .school-item:hover { transform: translateX(4px); }
   .school-item.dau { background:#f0fdf4; border-left:4px solid #22c55e; }
   .school-item.sat { background:#fffbeb; border-left:4px solid #f59e0b; }
   .school-item.kho { background:#fef2f2; border-left:4px solid #ef4444; }
-  .sc-name  { font-size:13px; font-weight:700; color:#222; }
-  .sc-meta  { font-size:11px; color:#888; margin-top:2px; }
-  .sc-badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
-  .dau .sc-badge { background:#dcfce7; color:#15803d; }
-  .sat .sc-badge { background:#fef3c7; color:#92400e; }
-  .kho .sc-badge { background:#fee2e2; color:#b91c1c; }
+  .school-name  { font-size:14px; font-weight:600; color:#333; }
+  .school-meta  { font-size:12px; color:#888; margin-top:2px; }
+  .school-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+  .dau .school-badge { background:#dcfce7; color:#15803d; }
+  .sat .school-badge { background:#fef3c7; color:#92400e; }
+  .kho .school-badge { background:#fee2e2; color:#b91c1c; }
 
   /* BẢNG CHUYÊN */
-  .chuyen-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:6px; }
-  .chuyen-table { width:100%; border-collapse:collapse; font-size:12px; min-width:340px; }
-  .chuyen-table th { background:#0066cc; color:white; padding:9px 7px; text-align:center; font-weight:700; font-size:11px; }
+  .chuyen-scroll { overflow-x:auto; margin-bottom:6px; }
+  .chuyen-table { width:100%; border-collapse:collapse; font-size:13px; min-width:340px; }
+  .chuyen-table th { background:#0066cc; color:white; padding:10px 8px; text-align:center; font-weight:700; }
   .chuyen-table th:first-child { text-align:left; }
-  .chuyen-table td { padding:8px 7px; border-bottom:1px solid #f0f0f0; text-align:center; color:#444; }
-  .chuyen-table td:first-child { text-align:left; font-weight:600; color:#222; }
+  .chuyen-table td { padding:9px 8px; border-bottom:1px solid #f0f0f0; text-align:center; color:#333; }
+  .chuyen-table td:first-child { text-align:left; font-weight:600; }
   .chuyen-table tr:nth-child(even) td { background:#f8faff; }
 
-  .not-found { text-align:center; padding:24px 16px; }
-  .not-found .nf-icon { font-size:48px; margin-bottom:10px; }
-  .not-found p { color:#ef4444; font-weight:700; font-size:15px; }
-  .not-found small { color:#aaa; font-size:13px; display:block; margin-top:5px; }
+  .not-found { text-align:center; padding:20px; color:#ef4444; font-weight:600; font-size:15px; }
+  .footer { text-align:center; color:rgba(255,255,255,0.6); font-size:12px; margin-top:10px; }
 
-  .footer { text-align:center; color:rgba(255,255,255,0.55); font-size:11px; margin-top:8px; padding-bottom:16px; }
-
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(16px)}  to{opacity:1;transform:translateY(0)} }
-  @keyframes typing   { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
-  @keyframes pop      { 0%{transform:scale(0.85);opacity:0} 70%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
-  .pop { animation: pop 0.45s ease forwards; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
+  @keyframes typing   { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+  @keyframes pop      { 0%{transform:scale(0.8);opacity:0} 70%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+  .pop { animation: pop 0.5s ease forwards; }
 </style>
 </head>
 <body>
@@ -236,27 +216,25 @@
   </div>
 
   <div class="card">
-    <div class="input-wrap">
-      <input type="text" id="sbdInput" placeholder="Số báo danh..." maxlength="10"
-        inputmode="numeric" onkeydown="if(event.key==='Enter')search()">
+    <div class="input-group">
+      <input type="text" id="sbdInput" placeholder="Nhập số báo danh..." maxlength="10"
+        onkeydown="if(event.key==='Enter') search()">
       <button class="btn-search" id="btnSearch" onclick="search()">🔍 Tra cứu</button>
     </div>
   </div>
 
   <div id="thuKhoaCard">
-    <div class="tk-header">
-      <span style="font-size:20px">🏆</span>
+    <div class="thu-khoa-header">
+      <span style="font-size:22px">🏆</span>
       <span class="tk-title">Thủ Khoa 2026</span>
-      <div class="tk-mode-wrap">
-        <select class="tk-mode-select" id="tkMode" onchange="renderThuKhoa()">
-          <option value="dai_tra">🏫 Đại trà</option>
-          <option value="chuyen">⭐ Chuyên</option>
-          <option value="ptdtnt">🌿 PTDTNT</option>
-        </select>
-      </div>
+      <select class="tk-mode-select" id="tkMode" onchange="renderThuKhoa()">
+        <option value="dai_tra">🏫 Đại trà</option>
+        <option value="chuyen">⭐ Chuyên</option>
+        <option value="ptdtnt">🌿 PTDTNT</option>
+      </select>
     </div>
     <div class="tk-list" id="tkList">
-      <div style="text-align:center;color:#bbb;padding:14px;font-size:13px">⏳ Đang tải...</div>
+      <div style="text-align:center;color:#aaa;padding:16px;font-size:14px">⏳ Đang tải dữ liệu...</div>
     </div>
   </div>
 
@@ -274,9 +252,7 @@ const MODEL   = "deepseek-v4-flash";
 
 let diemThiData   = null;
 let diemChuanData = null;
-
-// Cache xếp hạng để tính nhanh
-let rankCache = { dt: [], cv: [], pt: [] };
+let rankCache     = { dt:[], cv:[], pt:[] };
 
 async function loadData() {
   try {
@@ -289,12 +265,9 @@ async function loadData() {
 
     const arr = Array.isArray(j1) ? j1 : (j1.du_lieu ?? []);
     diemThiData = {};
-    arr.forEach(item => {
-      diemThiData[String(item.so_bao_danh).trim()] = item;
-    });
+    arr.forEach(item => { diemThiData[String(item.so_bao_danh).trim()] = item; });
     diemChuanData = j2;
 
-    // Build rank cache
     const all = Object.values(diemThiData);
     rankCache.dt = all.map(d => d.tong_dai_tra ?? 0).sort((a,b) => b-a);
     rankCache.cv = all.filter(d => d.mon_chuyen != null).map(d => d.tong_chuyen ?? 0).sort((a,b) => b-a);
@@ -305,335 +278,248 @@ async function loadData() {
   } catch(e) {
     console.error("❌", e);
     document.getElementById("tkList").innerHTML =
-      `<div style="text-align:center;color:#ef4444;padding:14px;font-size:13px">❌ Không tải được dữ liệu</div>`;
+      `<div style="text-align:center;color:#ef4444;padding:16px;font-size:14px">❌ Không tải được dữ liệu</div>`;
   }
 }
 loadData();
 
-// ── THỦ KHOA ──────────────────────────────────────────────
 function renderThuKhoa() {
   if (!diemThiData) return;
   const mode = document.getElementById("tkMode").value;
-
-  const tongField  = mode === "chuyen" ? "tong_chuyen" : mode === "ptdtnt" ? "tong_ptdtnt" : "tong_dai_tra";
-  const filterFn   = mode === "chuyen" ? ts => ts.mon_chuyen != null
-                   : mode === "ptdtnt" ? ts => ts.tong_ptdtnt != null
-                   : () => true;
-  const modeLabel  = mode === "chuyen" ? "tổng chuyên" : mode === "ptdtnt" ? "PTDTNT" : "đại trà";
-
-  const medals  = ["🥇","🥈","🥉"];
-  const classes = ["rank1","rank2","rank3"];
-  const rankLabel = ["Thủ khoa","Á khoa","Hạng Ba"];
+  const tongField = mode==="chuyen" ? "tong_chuyen" : mode==="ptdtnt" ? "tong_ptdtnt" : "tong_dai_tra";
+  const filterFn  = mode==="chuyen" ? ts=>ts.mon_chuyen!=null : mode==="ptdtnt" ? ts=>ts.tong_ptdtnt!=null : ()=>true;
+  const modeLabel = mode==="chuyen" ? "tổng chuyên" : mode==="ptdtnt" ? "PTDTNT" : "đại trà";
+  const medals=["🥇","🥈","🥉"], classes=["rank1","rank2","rank3"], labels=["Thủ khoa","Á khoa","Hạng Ba"];
 
   const top3 = Object.values(diemThiData)
-    .filter(filterFn)
-    .filter(ts => ts[tongField] != null)
-    .sort((a,b) => b[tongField] - a[tongField])
-    .slice(0,3);
+    .filter(filterFn).filter(ts=>ts[tongField]!=null)
+    .sort((a,b)=>b[tongField]-a[tongField]).slice(0,3);
 
   if (!top3.length) {
-    document.getElementById("tkList").innerHTML =
-      `<div style="text-align:center;color:#bbb;padding:14px;font-size:13px">Không có dữ liệu</div>`;
+    document.getElementById("tkList").innerHTML=`<div style="text-align:center;color:#aaa;padding:16px;font-size:14px">Không có dữ liệu</div>`;
     return;
   }
-
-  document.getElementById("tkList").innerHTML = top3.map((ts,i) => `
-    <div class="tk-item ${classes[i]} pop" style="animation-delay:${i*0.1}s">
+  document.getElementById("tkList").innerHTML = top3.map((ts,i)=>`
+    <div class="tk-item ${classes[i]} pop" style="animation-delay:${i*0.12}s">
       <div class="tk-medal">${medals[i]}</div>
       <div class="tk-info">
         <div class="tk-sbd">SBD: ${ts.so_bao_danh}</div>
-        <div class="tk-name">${ts.ho_ten ?? "—"} · ${rankLabel[i]}</div>
-        <div class="tk-tags">
-          <span class="tk-tag">📖 ${ts.ngu_van ?? "—"}</span>
-          <span class="tk-tag">🌐 ${ts.ngoai_ngu ?? "—"}</span>
-          <span class="tk-tag">📐 ${ts.toan ?? "—"}</span>
-          ${ts.mon_chuyen != null ? `<span class="tk-tag">⭐ ${ts.mon_chuyen}</span>` : ""}
+        <div class="tk-name">${ts.ho_ten??'—'} · ${labels[i]}</div>
+        <div class="tk-details">
+          <span class="tk-tag">📖 ${ts.ngu_van??'—'}</span>
+          <span class="tk-tag">🌐 ${ts.ngoai_ngu??'—'}</span>
+          <span class="tk-tag">📐 ${ts.toan??'—'}</span>
+          ${ts.mon_chuyen!=null?`<span class="tk-tag">⭐ ${ts.mon_chuyen}</span>`:''}
         </div>
       </div>
       <div class="tk-score-box">
         <div class="tk-score">${ts[tongField]}</div>
-        <div class="tk-slabel">${modeLabel}</div>
+        <div class="tk-score-label">${modeLabel}</div>
       </div>
     </div>`).join("");
 }
 
-function hideThuKhoa() {
-  document.getElementById("thuKhoaCard").classList.add("hidden");
-}
+function hideThuKhoa() { document.getElementById("thuKhoaCard").classList.add("hidden"); }
 
-// ── XẾP HẠNG ──────────────────────────────────────────────
 function tinhRank(arr, diem) {
-  if (!arr.length) return { rank: "?", total: "?" };
-  const rank = arr.findIndex(d => d <= diem) + 1;
-  return { rank: rank || arr.length, total: arr.length };
+  if (!arr.length) return { rank:"?", total:"?" };
+  const rank = arr.findIndex(d=>d<=diem)+1;
+  return { rank: rank||arr.length, total:arr.length };
 }
 
-// ── GỢI Ý TRƯỜNG ──────────────────────────────────────────
 function goiYTruong(tongDt) {
-  if (!diemChuanData?.phu_luc_4_cong_lap) return { dau:[], sat:[], kho:[] };
-  const dau=[], sat=[], kho=[];
-  diemChuanData.phu_luc_4_cong_lap.forEach(t => {
+  if (!diemChuanData?.phu_luc_4_cong_lap) return { dau:[],sat:[],kho:[] };
+  const dau=[],sat=[],kho=[];
+  diemChuanData.phu_luc_4_cong_lap.forEach(t=>{
     if (!t.diem_chuan) return;
-    const diff = Math.round((tongDt - t.diem_chuan) * 100) / 100;
-    const obj  = { ten: t.ten_truong, dc: t.diem_chuan, diff };
-    if      (diff >= 0)  dau.push(obj);
-    else if (diff > -1)  sat.push(obj);
-    else                 kho.push(obj);
+    const diff = Math.round((tongDt-t.diem_chuan)*100)/100;
+    const obj  = { ten:t.ten_truong, dc:t.diem_chuan, diff };
+    if      (diff>=0)  dau.push(obj);
+    else if (diff>-1)  sat.push(obj);
+    else               kho.push(obj);
   });
-  dau.sort((a,b) => b.dc - a.dc);
-  sat.sort((a,b) => b.diff - a.diff);
-  kho.sort((a,b) => b.diff - a.diff);
-  return { dau, sat, kho };
+  dau.sort((a,b)=>b.dc-a.dc);
+  sat.sort((a,b)=>b.diff-a.diff);
+  kho.sort((a,b)=>b.diff-a.diff);
+  return { dau,sat,kho };
 }
 
-// ── BẢNG CHUYÊN ───────────────────────────────────────────
 function renderBangChuyen(tongCv) {
-  if (!diemChuanData?.phu_luc_1_chuyen || tongCv == null) return "";
-  const rows = diemChuanData.phu_luc_1_chuyen.map(lop => {
-    const cols = [
-      { dc: lop.Le_Quy_Don },
-      { dc: lop.Nguyen_Binh_Khiem },
-      { dc: lop.Le_Thanh_Tong }
-    ].map(t => {
-      if (!t.dc) return `<td style="color:#ccc">—</td>`;
-      const diff = Math.round((tongCv - t.dc) * 100) / 100;
-      const color = diff >= 0 ? "#16a34a" : diff > -2 ? "#f59e0b" : "#aaa";
-      const icon  = diff >= 0 ? "✅" : diff > -2 ? "⚡" : "";
-      return `<td style="font-weight:700;color:${color}">${t.dc}${icon ? " "+icon : ""}</td>`;
-    }).join("");
-    return `<tr><td>${lop.lop_chuyen}</td>${cols}</tr>`;
+  if (!diemChuanData?.phu_luc_1_chuyen||tongCv==null) return "";
+  const rows = diemChuanData.phu_luc_1_chuyen.map(lop=>{
+    const cols=[{dc:lop.Le_Quy_Don},{dc:lop.Nguyen_Binh_Khiem},{dc:lop.Le_Thanh_Tong}]
+      .map(t=>{
+        if (!t.dc) return `<td style="color:#ccc">—</td>`;
+        const diff=Math.round((tongCv-t.dc)*100)/100;
+        const color=diff>=0?"#16a34a":diff>-2?"#f59e0b":"#aaa";
+        const icon=diff>=0?"✅":diff>-2?"⚡":"";
+        return `<td style="font-weight:700;color:${color}">${t.dc}${icon?" "+icon:""}</td>`;
+      }).join("");
+    return `<tr><td style="font-weight:600">${lop.lop_chuyen}</td>${cols}</tr>`;
   }).join("");
-
   return `
-    <div class="sec-title">🎯 So sánh điểm chuyên (tổng: <strong>${tongCv}</strong>)</div>
+    <div class="section-title">🎯 So sánh điểm chuyên (tổng: <strong>${tongCv}</strong>)</div>
     <div class="chuyen-scroll">
       <table class="chuyen-table">
-        <thead><tr>
-          <th>Lớp chuyên</th><th>Lê Quý Đôn</th><th>N.Bỉnh Khiêm</th><th>L.Thánh Tông</th>
-        </tr></thead>
+        <thead><tr><th>Lớp chuyên</th><th>Lê Quý Đôn</th><th>N.Bỉnh Khiêm</th><th>L.Thánh Tông</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>
-    <p style="font-size:11px;color:#aaa;margin-bottom:14px">✅ Đủ điểm &nbsp;⚡ Sát 2 điểm</p>`;
+    <p style="font-size:12px;color:#aaa;margin-bottom:16px">✅ Đủ điểm &nbsp;⚡ Sát 2 điểm</p>`;
 }
 
-// ── PTDTNT ────────────────────────────────────────────────
 function renderPTDTNT(tongPt) {
-  if (!diemChuanData?.phu_luc_2_ptdtnt || tongPt == null) return "";
-  const rows = diemChuanData.phu_luc_2_ptdtnt.map(obj => {
-    const diff = Math.round((tongPt - obj.diem_chuan) * 100) / 100;
-    const cls  = diff >= 0 ? "dau" : diff > -1 ? "sat" : "kho";
-    const icon = diff >= 0 ? "✅" : diff > -1 ? "⚡" : "❌";
-    const txt  = diff >= 0 ? "Đủ điều kiện" : diff > -1 ? "Sát sao" : "Chưa đủ";
+  if (!diemChuanData?.phu_luc_2_ptdtnt||tongPt==null) return "";
+  const rows = diemChuanData.phu_luc_2_ptdtnt.map(obj=>{
+    const diff=Math.round((tongPt-obj.diem_chuan)*100)/100;
+    const cls=diff>=0?"dau":diff>-1?"sat":"kho";
+    const icon=diff>=0?"✅":diff>-1?"⚡":"❌";
+    const txt=diff>=0?"Đủ điều kiện":diff>-1?"Sát sao":"Chưa đủ";
     return `<div class="school-item ${cls}">
-      <div><div class="sc-name">${obj.doi_tuong}</div>
-      <div class="sc-meta">Điểm chuẩn PTDTNT: ${obj.diem_chuan}</div></div>
-      <span class="sc-badge">${icon} ${txt}</span>
+      <div><div class="school-name">${obj.doi_tuong}</div>
+      <div class="school-meta">Điểm chuẩn PTDTNT: ${obj.diem_chuan}</div></div>
+      <span class="school-badge">${icon} ${txt}</span>
     </div>`;
   }).join("");
-  return `<div class="sec-title">🌿 Trường PTDTNT (tổng: ${tongPt})</div>${rows}`;
+  return `<div class="section-title">🌿 Trường PTDTNT (tổng: ${tongPt})</div>${rows}`;
 }
 
-// ── AI ────────────────────────────────────────────────────
 async function goiAI(info) {
-  const { ten, sbd, van, nn, toan, mon_chuyen, diem_kk, diem_ut, diem_qd,
-          tong_dt, tong_cv, rank_dt, total_dt, rank_cv, total_cv, truongDau, truongSat } = info;
-
-  const rankCvStr = rank_cv
-    ? `\n- Xếp hạng thi chuyên: Top ${rank_cv}/${total_cv} thí sinh thi chuyên toàn TP`
-    : "";
-
-  const prompt = `Bạn là AI cà khịa nhưng vẫn động viên học sinh vừa tra điểm thi tuyển sinh lớp 10 Đà Nẵng 2026.
+  const { ten,sbd,van,nn,toan,mon_cv,diem_kk,diem_ut,diem_qd,tong_dt,tong_cv,rank_dt,total_dt,rank_cv,total_cv,truongDau,truongSat } = info;
+  const prompt=`Bạn là AI cà khịa nhưng vẫn động viên học sinh vừa tra điểm thi tuyển sinh lớp 10 Đà Nẵng 2026.
 
 Thí sinh: ${ten} (SBD: ${sbd})
-- Ngữ Văn: ${van ?? "Vắng"} | Ngoại Ngữ: ${nn ?? "Vắng"} | Toán: ${toan ?? "Vắng"}
-${mon_chuyen != null ? `- Môn chuyên: ${mon_chuyen}` : ""}${diem_kk != null ? ` | Khuyến khích: ${diem_kk}` : ""}
-${diem_ut != null ? `- Ưu tiên: ${diem_ut}` : ""}${diem_qd != null ? ` | Quy đổi KQHT-RL: ${diem_qd}` : ""}
-- Tổng đại trà: ${tong_dt}${tong_cv != null ? ` | Tổng chuyên: ${tong_cv}` : ""}
-- Xếp hạng đại trà: Top ${rank_dt}/${total_dt} toàn TP${rankCvStr}
-- Trường có thể đậu: ${truongDau.slice(0,3).map(t=>t.ten).join(", ") || "chưa rõ"}
-- Trường sát sao: ${truongSat.slice(0,2).map(t=>t.ten).join(", ") || "không có"}
+- Ngữ Văn: ${van??'Vắng'} | Ngoại Ngữ: ${nn??'Vắng'} | Toán: ${toan??'Vắng'}
+${mon_cv!=null?`- Môn chuyên: ${mon_cv}`:''}${diem_kk!=null?` | Khuyến khích: ${diem_kk}`:''}
+${diem_ut!=null?`- Ưu tiên: ${diem_ut}`:''}${diem_qd!=null?` | Quy đổi KQHT-RL: ${diem_qd}`:''}
+- Tổng đại trà: ${tong_dt}${tong_cv!=null?` | Tổng chuyên: ${tong_cv}`:''}
+- Xếp hạng đại trà: Top ${rank_dt}/${total_dt} toàn TP
+${rank_cv?`- Xếp hạng thi chuyên: Top ${rank_cv}/${total_cv} thí sinh thi chuyên`:''}
+- Trường có thể đậu: ${truongDau.slice(0,3).map(t=>t.ten).join(', ')||'chưa rõ'}
+- Trường sát sao: ${truongSat.slice(0,2).map(t=>t.ten).join(', ')||'không có'}
 
 Viết 3-4 câu: cà khịa GenZ nhưng động viên, nhận xét điểm từng môn, chúc mừng hoặc an ủi. Tiếng Việt tự nhiên, có emoji. KHÔNG dùng markdown.`;
 
-  return fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type":"application/json", "Authorization":`Bearer ${API_KEY}` },
-    body: JSON.stringify({ model:MODEL, messages:[{role:"user",content:prompt}], max_tokens:400, stream:true })
+  return fetch(API_URL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization":`Bearer ${API_KEY}`},
+    body:JSON.stringify({model:MODEL,messages:[{role:"user",content:prompt}],max_tokens:400,stream:true})
   });
 }
 
-// ── SEARCH ────────────────────────────────────────────────
 async function search() {
-  const sbd = document.getElementById("sbdInput").value.trim();
-  if (!sbd) return;
-  if (!diemThiData) { alert("Đang tải dữ liệu, thử lại!"); return; }
+  const sbd=document.getElementById("sbdInput").value.trim();
+  if(!sbd) return;
+  if(!diemThiData){alert("Đang tải dữ liệu, thử lại!");return;}
 
-  const btn = document.getElementById("btnSearch");
-  btn.disabled = true; btn.textContent = "⏳ Tìm...";
+  const btn=document.getElementById("btnSearch");
+  btn.disabled=true; btn.textContent="⏳ Đang tìm...";
   hideThuKhoa();
 
-  const resultDiv  = document.getElementById("result");
-  const contentDiv = document.getElementById("resultContent");
-  resultDiv.style.display = "block";
-  contentDiv.innerHTML = `<div style="text-align:center;padding:30px;color:#aaa">⏳ Đang tải kết quả...</div>`;
-  resultDiv.scrollIntoView({ behavior:"smooth", block:"start" });
+  const resultDiv=document.getElementById("result");
+  const contentDiv=document.getElementById("resultContent");
+  resultDiv.style.display="block";
 
-  const ts = diemThiData[sbd] ?? diemThiData[sbd.padStart(5,"0")] ?? null;
-
-  if (!ts) {
-    contentDiv.innerHTML = `
-      <div class="not-found">
-        <div class="nf-icon">😅</div>
-        <p>Không tìm thấy SBD <strong>${sbd}</strong></p>
-        <small>Kiểm tra lại số báo danh nhé!</small>
-      </div>`;
-    btn.disabled=false; btn.textContent="🔍 Tra cứu";
-    return;
+  const ts=diemThiData[sbd]??diemThiData[sbd.padStart(5,"0")]??null;
+  if(!ts){
+    contentDiv.innerHTML=`<div class="not-found">😅 Không tìm thấy SBD <strong>${sbd}</strong><br><small>Kiểm tra lại số báo danh nhé!</small></div>`;
+    btn.disabled=false; btn.textContent="🔍 Tra cứu"; return;
   }
 
-  const van     = ts.ngu_van;
-  const nn      = ts.ngoai_ngu;
-  const toan    = ts.toan;
-  const mon_cv  = ts.mon_chuyen;
-  const diem_kk = ts.diem_kk;
-  const diem_ut = ts.diem_uu_tien;
-  const diem_qd = ts.diem_quy_doi;
-  const tong_dt = ts.tong_dai_tra;
-  const tong_pt = ts.tong_ptdtnt;
-  const tong_cv = ts.tong_chuyen;
+  const van=ts.ngu_van, nn=ts.ngoai_ngu, toan=ts.toan;
+  const mon_cv=ts.mon_chuyen, diem_kk=ts.diem_kk, diem_ut=ts.diem_uu_tien, diem_qd=ts.diem_quy_doi;
+  const tong_dt=ts.tong_dai_tra, tong_pt=ts.tong_ptdtnt, tong_cv=ts.tong_chuyen;
 
-  // Xếp hạng đại trà (toàn bộ TS)
-  const { rank: rank_dt, total: total_dt } = tinhRank(rankCache.dt, tong_dt ?? 0);
-  const pct_dt = Math.round((1 - rank_dt / total_dt) * 100);
+  const {rank:rank_dt,total:total_dt}=tinhRank(rankCache.dt,tong_dt??0);
+  const pct_dt=Math.round((1-rank_dt/total_dt)*100);
 
-  // Xếp hạng chuyên (chỉ TS thi chuyên)
-  let rank_cv = null, total_cv = null, pct_cv = null;
-  if (mon_cv != null && rankCache.cv.length) {
-    const r = tinhRank(rankCache.cv, tong_cv ?? 0);
-    rank_cv = r.rank; total_cv = r.total;
-    pct_cv = Math.round((1 - rank_cv / total_cv) * 100);
+  let rank_cv=null,total_cv=null,pct_cv=null;
+  if(mon_cv!=null&&rankCache.cv.length){
+    const r=tinhRank(rankCache.cv,tong_cv??0);
+    rank_cv=r.rank; total_cv=r.total; pct_cv=Math.round((1-rank_cv/total_cv)*100);
+  }
+  let rank_pt=null,total_pt=null,pct_pt=null;
+  if(tong_pt!=null&&rankCache.pt.length){
+    const r=tinhRank(rankCache.pt,tong_pt??0);
+    rank_pt=r.rank; total_pt=r.total; pct_pt=Math.round((1-rank_pt/total_pt)*100);
   }
 
-  // Xếp hạng PTDTNT
-  let rank_pt = null, total_pt = null, pct_pt = null;
-  if (tong_pt != null && rankCache.pt.length) {
-    const r = tinhRank(rankCache.pt, tong_pt ?? 0);
-    rank_pt = r.rank; total_pt = r.total;
-    pct_pt = Math.round((1 - rank_pt / total_pt) * 100);
-  }
+  const {dau,sat,kho}=goiYTruong(tong_dt??0);
 
-  const { dau, sat, kho } = goiYTruong(tong_dt ?? 0);
+  // Score boxes
+  const boxes=[];
+  boxes.push(`<div class="score-box van pop"><div class="mon">Ngữ Văn</div><div class="diem">${van??'—'}</div><div class="label">điểm</div></div>`);
+  boxes.push(`<div class="score-box nn pop"><div class="mon">Ngoại Ngữ</div><div class="diem">${nn??'—'}</div><div class="label">điểm</div></div>`);
+  boxes.push(`<div class="score-box toan pop"><div class="mon">Toán</div><div class="diem">${toan??'—'}</div><div class="label">điểm</div></div>`);
+  if(mon_cv!=null) boxes.push(`<div class="score-box chuyen pop"><div class="mon">Môn Chuyên</div><div class="diem">${mon_cv}</div><div class="label">điểm</div></div>`);
+  if(diem_kk!=null) boxes.push(`<div class="score-box kk pop"><div class="mon">Khuyến Khích</div><div class="diem">${diem_kk}</div><div class="label">điểm</div></div>`);
+  if(diem_ut!=null) boxes.push(`<div class="score-box ut pop"><div class="mon">Ưu Tiên</div><div class="diem">${diem_ut}</div><div class="label">điểm</div></div>`);
+  const colsCls=boxes.length<=3?"cols-3":"cols-4";
 
-  // ── Score boxes ──
-  const boxes = [
-    `<div class="sbox van pop"><div class="mon">Ngữ Văn</div><div class="diem">${van ?? "—"}</div><div class="lbl">điểm</div></div>`,
-    `<div class="sbox nn pop"><div class="mon">Ngoại Ngữ</div><div class="diem">${nn ?? "—"}</div><div class="lbl">điểm</div></div>`,
-    `<div class="sbox toan pop"><div class="mon">Toán</div><div class="diem">${toan ?? "—"}</div><div class="lbl">điểm</div></div>`,
-  ];
-  if (mon_cv  != null) boxes.push(`<div class="sbox chuyen pop"><div class="mon">Môn Chuyên</div><div class="diem">${mon_cv}</div><div class="lbl">điểm</div></div>`);
-  if (diem_kk != null) boxes.push(`<div class="sbox kk pop"><div class="mon">Khuyến Khích</div><div class="diem">${diem_kk}</div><div class="lbl">điểm</div></div>`);
-  if (diem_ut != null) boxes.push(`<div class="sbox ut pop"><div class="mon">Ưu Tiên</div><div class="diem">${diem_ut}</div><div class="lbl">điểm</div></div>`);
+  // Tổng
+  let tongHtml=`<div class="tong-section">`;
+  if(tong_dt!=null) tongHtml+=`<div class="total-box dai-tra pop"><div class="tb-icon">🏫</div><div><div class="tb-label">TỔNG ĐIỂM ĐẠI TRÀ</div><div class="tb-score">${tong_dt}</div></div></div>`;
+  if(tong_pt!=null) tongHtml+=`<div class="total-box ptdtnt pop"><div class="tb-icon">🌿</div><div><div class="tb-label">TỔNG ĐIỂM PTDTNT</div><div class="tb-score">${tong_pt}</div></div></div>`;
+  if(tong_cv!=null) tongHtml+=`<div class="total-box chuyen pop"><div class="tb-icon">⭐</div><div><div class="tb-label">TỔNG ĐIỂM CHUYÊN</div><div class="tb-score">${tong_cv}</div></div></div>`;
+  tongHtml+=`</div>`;
 
-  const colsCls = boxes.length <= 3 ? "g3" : "g4";
-
-  // ── Tổng điểm ──
-  let tongHtml = `<div class="tong-section">`;
-  if (tong_dt != null) tongHtml += `
-    <div class="tong-box dt pop">
-      <div class="tb-icon">🏫</div>
-      <div class="tb-info">
-        <div class="tb-label">TỔNG ĐIỂM ĐẠI TRÀ</div>
-        <div class="tb-score">${tong_dt}</div>
-      </div>
+  // Rank
+  const rankIcon=rank_dt<=10?"🏆":rank_dt<=50?"🥈":rank_dt<=200?"🥉":"📊";
+  let rankHtml=`<div class="rank-section">
+    <div class="rank-box dt pop">
+      <div class="rank-icon">${rankIcon}</div>
+      <div><div class="rank-text">Top ${rank_dt} / ${total_dt} thí sinh toàn TP</div>
+      <div class="rank-sub">Cao hơn ${pct_dt}% thí sinh đại trà 📈</div></div>
     </div>`;
-  if (tong_pt != null) tongHtml += `
-    <div class="tong-box pt pop">
-      <div class="tb-icon">🌿</div>
-      <div class="tb-info">
-        <div class="tb-label">TỔNG ĐIỂM PTDTNT</div>
-        <div class="tb-score">${tong_pt}</div>
-      </div>
-    </div>`;
-  if (tong_cv != null) tongHtml += `
-    <div class="tong-box cv pop">
-      <div class="tb-icon">⭐</div>
-      <div class="tb-info">
-        <div class="tb-label">TỔNG ĐIỂM CHUYÊN</div>
-        <div class="tb-score">${tong_cv}</div>
-      </div>
-    </div>`;
-  tongHtml += `</div>`;
-
-  // ── Rank chips ──
-  const rankIcon = rank_dt <= 10 ? "🏆" : rank_dt <= 50 ? "🥈" : rank_dt <= 200 ? "🥉" : "📊";
-  let rankHtml = `<div class="rank-section">
-    <div class="rank-chip dt pop">
-      <div class="ri">${rankIcon}</div>
-      <div>
-        <div class="rt">Top ${rank_dt} / ${total_dt} thí sinh toàn TP</div>
-        <div class="rs">Cao hơn ${pct_dt}% thí sinh đại trà 📈</div>
-      </div>
-    </div>`;
-
-  if (rank_cv != null) {
-    const cvIcon = rank_cv <= 10 ? "🏆" : rank_cv <= 50 ? "🥈" : rank_cv <= 100 ? "🥉" : "⭐";
-    rankHtml += `
-    <div class="rank-chip cv pop">
-      <div class="ri">${cvIcon}</div>
-      <div>
-        <div class="rt">Top ${rank_cv} / ${total_cv} thí sinh thi chuyên</div>
-        <div class="rs">Cao hơn ${pct_cv}% thí sinh thi chuyên 🎯</div>
-      </div>
+  if(rank_cv!=null){
+    const cvIcon=rank_cv<=10?"🏆":rank_cv<=50?"🥈":rank_cv<=100?"🥉":"⭐";
+    rankHtml+=`<div class="rank-box cv pop">
+      <div class="rank-icon">${cvIcon}</div>
+      <div><div class="rank-text">Top ${rank_cv} / ${total_cv} thí sinh thi chuyên</div>
+      <div class="rank-sub">Cao hơn ${pct_cv}% thí sinh thi chuyên 🎯</div></div>
     </div>`;
   }
-
-  if (rank_pt != null) {
-    const ptIcon = rank_pt <= 5 ? "🏆" : rank_pt <= 20 ? "🥈" : "🌿";
-    rankHtml += `
-    <div class="rank-chip pt pop">
-      <div class="ri">${ptIcon}</div>
-      <div>
-        <div class="rt">Top ${rank_pt} / ${total_pt} thí sinh PTDTNT</div>
-        <div class="rs">Cao hơn ${pct_pt}% thí sinh PTDTNT 🌿</div>
-      </div>
+  if(rank_pt!=null){
+    const ptIcon=rank_pt<=5?"🏆":rank_pt<=20?"🥈":"🌿";
+    rankHtml+=`<div class="rank-box pt pop">
+      <div class="rank-icon">${ptIcon}</div>
+      <div><div class="rank-text">Top ${rank_pt} / ${total_pt} thí sinh PTDTNT</div>
+      <div class="rank-sub">Cao hơn ${pct_pt}% thí sinh PTDTNT 🌿</div></div>
     </div>`;
   }
-  rankHtml += `</div>`;
+  rankHtml+=`</div>`;
 
-  // ── School list ──
-  function schoolList(arr, cls, badge) {
-    return arr.slice(0,4).map(s => {
-      const diffTxt = s.diff === 0 ? "Bằng điểm chuẩn"
-                    : s.diff > 0   ? `Hơn ${s.diff} điểm`
-                    : `Thiếu ${Math.abs(s.diff)} điểm`;
+  function schoolList(arr,cls,badge){
+    return arr.slice(0,4).map(s=>{
+      const diffTxt=s.diff===0?"Bằng điểm chuẩn":s.diff>0?`Hơn ${s.diff} điểm`:`Thiếu ${Math.abs(s.diff)} điểm`;
       return `<div class="school-item ${cls}">
-        <div><div class="sc-name">${s.ten}</div>
-        <div class="sc-meta">Điểm chuẩn 2026: ${s.dc} · ${diffTxt}</div></div>
-        <span class="sc-badge">${badge}</span>
+        <div><div class="school-name">${s.ten}</div>
+        <div class="school-meta">Điểm chuẩn 2026: ${s.dc} · ${diffTxt}</div></div>
+        <span class="school-badge">${badge}</span>
       </div>`;
     }).join("");
   }
 
-  contentDiv.innerHTML = `
+  contentDiv.innerHTML=`
     <div class="student-header">
       <div class="avatar">🎒</div>
-      <div>
-        <div class="stu-name">${ts.ho_ten ?? "Thí sinh"}</div>
-        <div class="stu-sub">SBD: ${ts.so_bao_danh} · Lớp 10 Đà Nẵng 2026</div>
+      <div class="student-info">
+        <h2>${ts.ho_ten??'Thí sinh'}</h2>
+        <span class="sbd-tag">SBD: ${ts.so_bao_danh} · Lớp 10 Đà Nẵng 2026</span>
       </div>
     </div>
 
     <div class="scores-grid ${colsCls}">${boxes.join("")}</div>
 
-    ${diem_qd != null ? `
+    ${diem_qd!=null?`
     <div class="qd-bar pop">
       <div class="qd-icon">📋</div>
-      <div class="qd-info">
+      <div>
         <div class="qd-label">Quy đổi kết quả học tập & rèn luyện (4 năm)</div>
         <div class="qd-val">${diem_qd} điểm</div>
+        <div class="qd-sub">Tính vào tổng điểm xét tuyển</div>
       </div>
-    </div>` : ""}
+    </div>`:""}
 
     ${tongHtml}
     ${rankHtml}
@@ -648,41 +534,35 @@ async function search() {
     ${renderBangChuyen(tong_cv)}
     ${renderPTDTNT(tong_pt)}
 
-    ${dau.length ? `<div class="sec-title">🟢 Trường công lập có thể đậu</div>${schoolList(dau,"dau","✅ Khả năng cao")}` : ""}
-    ${sat.length ? `<div class="sec-title">🟡 Sát sao (dưới 1 điểm)</div>${schoolList(sat,"sat","⚡ Cần theo dõi")}` : ""}
-    ${kho.length ? `<div class="sec-title">🔴 Khó đậu hơn</div>${schoolList(kho.slice(0,4),"kho","❌ Cần cân nhắc")}` : ""}
+    ${dau.length?`<div class="section-title">🟢 Trường công lập có thể đậu</div>${schoolList(dau,"dau","✅ Khả năng cao")}`:""}
+    ${sat.length?`<div class="section-title">🟡 Sát sao (dưới 1 điểm)</div>${schoolList(sat,"sat","⚡ Cần theo dõi")}`:""}
+    ${kho.length?`<div class="section-title">🔴 Khó đậu hơn</div>${schoolList(kho.slice(0,4),"kho","❌ Cần cân nhắc")}`:""}
   `;
 
-  // AI stream
   try {
-    const res = await goiAI({ ten:ts.ho_ten, sbd:ts.so_bao_danh, van, nn, toan,
-      mon_chuyen:mon_cv, diem_kk, diem_ut, diem_qd,
-      tong_dt, tong_cv, rank_dt, total_dt, rank_cv, total_cv, truongDau:dau, truongSat:sat });
-    const reader  = res.body.getReader();
-    const decoder = new TextDecoder();
-    const aiEl    = document.getElementById("aiText");
-    aiEl.innerHTML = "";
-    let buf = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += decoder.decode(value, { stream:true });
-      const lines = buf.split("\n"); buf = lines.pop();
-      for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
-        const data = line.slice(6).trim();
-        if (data === "[DONE]") break;
-        try {
-          const chunk = JSON.parse(data).choices?.[0]?.delta?.content ?? "";
-          aiEl.innerHTML += chunk.replace(/\n/g,"<br>");
-        } catch {}
+    const res=await goiAI({ten:ts.ho_ten,sbd:ts.so_bao_danh,van,nn,toan,mon_cv,diem_kk,diem_ut,diem_qd,tong_dt,tong_cv,rank_dt,total_dt,rank_cv,total_cv,truongDau:dau,truongSat:sat});
+    const reader=res.body.getReader(), decoder=new TextDecoder();
+    const aiEl=document.getElementById("aiText");
+    aiEl.innerHTML="";
+    let buf="";
+    while(true){
+      const{done,value}=await reader.read();
+      if(done) break;
+      buf+=decoder.decode(value,{stream:true});
+      const lines=buf.split("\n"); buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith("data: ")) continue;
+        const data=line.slice(6).trim();
+        if(data==="[DONE]") break;
+        try{ const chunk=JSON.parse(data).choices?.[0]?.delta?.content??""; aiEl.innerHTML+=chunk.replace(/\n/g,"<br>"); }catch{}
       }
     }
-  } catch {
-    document.getElementById("aiText").innerHTML = "😅 AI đang bận, thử lại sau nhé!";
+  } catch{
+    document.getElementById("aiText").innerHTML="😅 AI đang bận, thử lại sau nhé!";
   }
 
   btn.disabled=false; btn.textContent="🔍 Tra cứu";
+  resultDiv.scrollIntoView({behavior:"smooth",block:"start"});
 }
 </script>
 </body>
