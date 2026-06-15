@@ -306,10 +306,10 @@ function renderThuKhoa() {
         <div class="tk-sbd">SBD: ${ts.so_bao_danh}</div>
         <div class="tk-name">${ts.ho_ten??'—'} · ${labels[i]}</div>
         <div class="tk-details">
-          <span class="tk-tag">📖 ${ts.ngu_van??'—'}</span>
-          <span class="tk-tag">🌐 ${ts.ngoai_ngu??'—'}</span>
-          <span class="tk-tag">📐 ${ts.toan??'—'}</span>
-          ${ts.mon_chuyen!=null?`<span class="tk-tag">⭐ ${ts.mon_chuyen}</span>`:''}
+          <span class="tk-tag">📖 Ngữ Văn: ${ts.ngu_van??'—'}</span>
+          <span class="tk-tag">🌐 NN: ${ts.ngoai_ngu??'—'}</span>
+          <span class="tk-tag">📐 Toán: ${ts.toan??'—'}</span>
+          ${ts.mon_chuyen!=null?`<span class="tk-tag">⭐ Chuyên: ${ts.mon_chuyen}</span>`:''}
         </div>
       </div>
       <div class="tk-score-box">
