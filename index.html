@@ -475,10 +475,34 @@ function renderPTDTNT(tongPt) {
   return `<div class="section-title">🏫 Trường PTDTNT Quảng Nam (tổng: ${tongPt})</div>${rows}`;
 }
 
+// ========== BUILD CHUYEN INFO CHO AI ==========
+function buildChuyenInfoForAI(tongChuyen) {
+  if (!diemChuanData?.phu_luc_1_chuyen || tongChuyen == null) return "";
+
+  const lines = diemChuanData.phu_luc_1_chuyen.map(lop => {
+    const truongs = [
+      { ten: "Lê Quý Đôn",       dc: lop.Le_Quy_Don },
+      { ten: "Nguyễn Bỉnh Khiêm", dc: lop.Nguyen_Binh_Khiem },
+      { ten: "Lê Thánh Tông",    dc: lop.Le_Thanh_Tong }
+    ];
+    const parts = truongs
+      .filter(t => t.dc != null)
+      .map(t => {
+        const diff = Math.round((tongChuyen - t.dc) * 100) / 100;
+        const trang = diff >= 0 ? "ĐẬU ✅" : diff > -2 ? "SÁT ⚡" : "TRƯỢT ❌";
+        return `${t.ten}: chuẩn ${t.dc} → ${trang} (${diff >= 0 ? "+" : ""}${diff})`;
+      });
+    return `  ${lop.lop_chuyen}: ${parts.join(" | ")}`;
+  });
+
+  return `\nĐiểm chuẩn các lớp chuyên (so với tổng chuyên ${tongChuyen} của thí sinh):\n${lines.join("\n")}`;
+}
+
 // ========== AI ==========
 async function goiAI(info) {
   const { sbd, ten, van, nn, toan, mon_chuyen, diem_kk, diem_ut, diem_qd,
-          tong_dai_tra, tong_chuyen, rank, total, truongDau, truongSat } = info;
+          tong_dai_tra, tong_chuyen, rank, total,
+          truongDau, truongSat, chuyenInfo } = info;
 
   const prompt = `Bạn là AI cà khịa nhưng vẫn động viên học sinh vừa tra điểm thi tuyển sinh lớp 10 Đà Nẵng 2026.
 
@@ -493,10 +517,11 @@ ${diem_qd    != null ? `- Điểm quy đổi (KQHT-RL): ${diem_qd}` : ""}
 - Tổng điểm đại trà: ${tong_dai_tra}
 ${tong_chuyen != null ? `- Tổng điểm chuyên: ${tong_chuyen}` : ""}
 - Xếp hạng: Top ${rank}/${total} thí sinh toàn thành phố
-- Trường có thể đậu: ${truongDau.slice(0,3).map(t=>t.ten).join(", ") || "chưa rõ"}
+- Trường công lập có thể đậu: ${truongDau.slice(0,3).map(t=>t.ten).join(", ") || "chưa rõ"}
 - Trường sát sao: ${truongSat.slice(0,2).map(t=>t.ten).join(", ") || "không có"}
+${chuyenInfo}
 
-Hãy viết 3-4 câu: cà khịa hài hước GenZ nhưng có động viên, nhận xét điểm từng môn, chúc mừng hoặc an ủi. Dùng tiếng Việt tự nhiên, có thể dùng emoji. KHÔNG dùng markdown.`;
+Hãy viết 3-4 câu: cà khịa hài hước GenZ nhưng có động viên, nhận xét điểm từng môn, nếu có thi chuyên thì nhận xét luôn khả năng đậu lớp chuyên nào, chúc mừng hoặc an ủi. Dùng tiếng Việt tự nhiên, có thể dùng emoji. KHÔNG dùng markdown.`;
 
   return fetch(API_URL, {
     method: "POST",
@@ -662,11 +687,13 @@ async function search() {
 
   // --- AI streaming ---
   try {
+    const chuyenInfo = buildChuyenInfoForAI(tong_cv);
     const res = await goiAI({
       sbd: ts.so_bao_danh, ten: ts.ho_ten, van, nn, toan,
       mon_chuyen, diem_kk, diem_ut, diem_qd,
       tong_dai_tra: tong_dt, tong_chuyen: tong_cv,
-      rank, total, truongDau: dau, truongSat: sat
+      rank, total, truongDau: dau, truongSat: sat,
+      chuyenInfo
     });
     const reader  = res.body.getReader();
     const decoder = new TextDecoder();
